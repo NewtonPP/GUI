@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PeriodicTable } from '../PeriodicTable.js'
 import Fingerprints from './Fingerprints.jsx';
 import Networklayers from './Networklayers.jsx';
+import { setAtomtypes } from '../Slices/DataSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AtomTypes = () => {
+  const dispatch = useDispatch();
+
   const [selectionArray, setSelectionArray] = useState([]);  // Track the number of dropdowns
   const [atoms, setAtoms] = useState([]);  // Track selected atoms
   const [atomicMasses, setAtomicMasses] = useState({});  // Track atomic masses for each selected atom
@@ -29,6 +33,12 @@ const AtomTypes = () => {
       }));
     }
   };
+
+const AtomsDataToSend = {atoms,atomicMasses}
+useEffect(()=>{
+dispatch(setAtomtypes(AtomsDataToSend))
+},[atoms,atomicMasses,dispatch])
+
 
   return (
     <>

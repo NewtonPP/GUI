@@ -2,24 +2,29 @@ import fs from "fs"
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path"
 export const GenerateScripts = (req,res) =>{
+    console.log(req.body)
 try {
-    const {elements, mass} = req.body;
+    const {atoms, atomicMasses,} = req.body.atomtypes;
+    const {fingerprintsPerElement, fingerprintsArray} = req.body.fingerprintsperelement
+  
     var scriptContent = ""
     scriptContent+="atomtypes:\n"
-    elements.forEach((elem, index) =>{
-        scriptContent+=elem
+    atoms.forEach((atom, index) =>{
+        scriptContent+=atom
         scriptContent+=" "
     });
 
     scriptContent+="\n"
 
-    // elements.forEach((elem, index)=>{
-    //     scriptContent+=`mass:${elem}:\n${mass[index]}\n`
-    // })
-    for (let key in mass){
-        if(mass.hasOwnProperty(key)){
-            console.log(key, mass[key])
+    for (let key in atomicMasses){
+        if(atomicMasses.hasOwnProperty(key)){
+            scriptContent+=`mass:${key}:\n${atomicMasses[key]}\n`   
         }
+    }
+
+    for(let key in fingerprintsPerElement){
+        scriptContent+=`fingerprintsperelement:${key}:\n`
+        scriptContent+=`${fingerprintsPerElement[key]}\n`
     }
 
     const __filename = fileURLToPath(import.meta.url)

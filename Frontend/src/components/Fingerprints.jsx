@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { setFingerprints } from '../Slices/DataSlice.js';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Fingerprints = ({ atoms = [] }) => {
+  const dispatch = useDispatch();
   const [fingerprintsPerElement, setFingerprintsPerElement] = useState({});
   const [fingerprintsArray, setFingerprintsArray] = useState({});
 
@@ -12,8 +15,6 @@ const Fingerprints = ({ atoms = [] }) => {
       [atom]: Array(count).fill(""),  // Initialize empty inputs for each fingerprint
     }));
   };
-  console.log(fingerprintsPerElement)
-  console.log(fingerprintsArray)
 
   const handleFingerprintChange = (value, atom, index) => {
     setFingerprintsArray((prev) => ({
@@ -22,6 +23,21 @@ const Fingerprints = ({ atoms = [] }) => {
     }));
   };
 
+
+  //FingerprintsPerElement is an object that holds the element and numbers of fingerprints associated
+  //with that element
+
+  //FingerprintsArray is the array with the fingerprints of that element
+const FingerprintsData = {
+  fingerprintsPerElement,
+  fingerprintsArray
+}
+useEffect(()=>{
+dispatch(setFingerprints(FingerprintsData))
+},[fingerprintsPerElement,fingerprintsArray, dispatch])
+
+const FingerprintsDataa = useSelector((state)=>state.data.fingerprintsperelement)
+console.log(FingerprintsDataa)
   return (
     <div className="container mx-auto p-6">
       {atoms.map((atom) => (
