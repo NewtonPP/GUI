@@ -2,6 +2,7 @@ import Atomtypes from "./components/Atomtypes"
 import {Provider} from "react-redux"
 import { store } from "./store.js"
 import Submit from "./components/Submit.jsx"
+import CalibrationParameters from "./components/CalibrationParameters.jsx"
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <>
     <Provider store={store}> 
     <Atomtypes/>
+    <CalibrationParameters/>
     <Submit/>
     </Provider>
     </>

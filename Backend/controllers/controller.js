@@ -1,12 +1,16 @@
 import fs from "fs"
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path"
+
+
 export const GenerateScripts = (req,res) =>{
-    console.log(req.body)
 try {
     const {atoms, atomicMasses,} = req.body.atomtypes;
     const {fingerprintsPerElement, fingerprintsArray} = req.body.fingerprintsperelement
-  
+    const {networklayers} = req.body;
+    const {calibrationparameters} = req.body
+    const {activationfunctions} = req.body
+
     var scriptContent = ""
     scriptContent+="atomtypes:\n"
     atoms.forEach((atom, index) =>{
@@ -25,6 +29,31 @@ try {
     for(let key in fingerprintsPerElement){
         scriptContent+=`fingerprintsperelement:${key}:\n`
         scriptContent+=`${fingerprintsPerElement[key]}\n`
+    }
+
+    for (let key in networklayers){
+        scriptContent+=`networklayers:${key}:\n`
+        scriptContent+=`${networklayers[key].length}\n`
+    }
+
+    for (let key in networklayers){
+       for (let i = 0; i<networklayers[key].length; i++){
+        scriptContent+=`layersize:${key}:${i}:\n`
+        scriptContent+=`${networklayers[key][i]}\n`
+       }   
+    }
+
+    for (let key in activationfunctions){
+        for (let i = 0; i<activationfunctions[key].length-1; i++){
+            scriptContent+=`activationfunctions:${key}:${i}:\n`
+            scriptContent+=`${activationfunctions[key][i]}\n`
+        }
+    }
+
+    //For Calibration Parameters
+    for (let key in calibrationparameters){
+        scriptContent+=`calibrationparameters:${key}:\n`
+        scriptContent+=`${calibrationparameters[key]}\n`
     }
 
     const __filename = fileURLToPath(import.meta.url)

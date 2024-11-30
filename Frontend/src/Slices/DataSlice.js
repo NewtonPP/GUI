@@ -5,7 +5,9 @@ const DataSlice = createSlice({
     initialState:{
         atomtypes:"",
         fingerprintsperelement:"",
-        networklayers:""
+        networklayers:"",
+        calibrationparameters:"",
+        activationfunctions:"",
     },
     reducers:{
         setAtomtypes: (state,action)=>{
@@ -16,10 +18,16 @@ const DataSlice = createSlice({
         },
         setNetworkLayers:(state,action)=>{
             state.networklayers = action.payload
+        },
+        setCalibrationparameters:(state,action)=>{
+            state.calibrationparameters = action.payload
+        },
+        setActivationFunctions:(state,action)=>{
+            state.activationfunctions = action.payload
         }
 
     }
 })
 
-export const {setAtomtypes, setFingerprints,setNetworkLayers} = DataSlice.actions
+export const {setAtomtypes, setFingerprints,setNetworkLayers, setCalibrationparameters, setActivationFunctions} = DataSlice.actions
 export default DataSlice.reducer

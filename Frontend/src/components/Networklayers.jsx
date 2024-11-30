@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { setNetworkLayers } from '../Slices/DataSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import ActivationFunctions from './ActivationFunctions.jsx';
 
 const NetworkLayers = ({ atoms = [] }) => {
+  const[LayerCount, setLayerCount] = useState({});
   const dispatch = useDispatch() 
   const [layers, setLayers] = useState({});
 
   const handleLayerSizes = (value, atom) => {
     const count = Number(value);
+    setLayerCount((prev)=>({...prev,[atom]:count}))
     setLayers((prev) => ({ ...prev, [atom]: Array(count).fill("") }));
   }; 
 
+  var newLayer
   const handleChangeInLayers = (value, atom, index) =>{
-    var newLayer = {...layers}
+    var newLayer = {...layers,[atom]:[...layers[atom]]}
     newLayer[atom][index] = value
-   console.log(newLayer)
+   setLayers(newLayer)
   }
 
 
-  // useEffect(()=>{
-  //   dispatch(setNetworkLayers(layersize))
-  // },[layersize, dispatch])
-
-  const data = useSelector((state)=>state.data.networklayers)
-  console.log(data)
-
-
-
-  console.log(layers)
+  useEffect(()=>{
+    dispatch(setNetworkLayers(layers))
+  },[layers, dispatch])
+  
   return (
+    <>
     <div className="container mx-auto p-6">
       <div className="flex flex-col gap-8 w-full max-w-full mx-auto">
         {atoms.map((atom) => (
@@ -74,6 +73,8 @@ const NetworkLayers = ({ atoms = [] }) => {
         ))}
       </div>
     </div>
+    <ActivationFunctions layers = {layers} atoms = {atoms}/>
+    </>
   );
 };
 
