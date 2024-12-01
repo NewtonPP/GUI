@@ -13,51 +13,50 @@ const Fingerprints = ({ atoms = [] }) => {
     setFingerprintsPerElement((prev) => ({ ...prev, [atom]: count }));
     setFingerprintsArray((prev) => ({
       ...prev,
-      [atom]: Array(count).fill(""),  // Initialize empty inputs for each fingerprint
+      [atom]: Array(count).fill({ fingerprint: "", fingerprinttype:"", params: {} }),
     }));
-    setSplittedObj((prev)=>({...prev, [atom]:Array(count).fill("")}))
+    setSplittedObj((prev) => ({ ...prev, [atom]: Array(count).fill("") }));
   };
-
-
 
   const handleFingerprintChange = (value, atom, index) => {
     const SplittedValue = value.split("_");
-    
-    if(SplittedValue[0]!=atom) console.log("The first atom should be selected atom")
+    setSplittedObj((prev) => ({
+      ...prev,
+      [atom]: prev[atom].map((val, i) => (i === index ? SplittedValue.length : val)),
+    }));
     setFingerprintsArray((prev) => ({
       ...prev,
-      [atom]: prev[atom].map((val, i) => (i === index ? value : val)),
+      [atom]: prev[atom].map((item, i) =>
+        i === index ? { ...item, fingerprint: value } : item
+      ),
+    }));
+  };
+
+  const handleParameterChange = ({atom, index, fingerprinttype="" , param="" , paramValue=""}) => {
+    setFingerprintsArray((prev) => ({
+      ...prev,
+      [atom]: prev[atom].map((item, i) =>
+        i === index
+          ? { ...item, fingerprinttype:fingerprinttype, params: { ...item.params, [param]: paramValue } }
+          : item
+      ),
     }));
   };
 
 
-  console.log(fingerprintsArray)
-
-  // const ValidationArray = {...fingerprintsArray}
- 
-  // for (let key in ValidationArray){
-  //   for(let i =0; i<ValidationArray[key].length; i++){
-  //    const SplittedAtoms =  ValidationArray[key][i].split("_")
-
-  //    if(SplittedAtoms[0] !== key){
-  //     console.log("The first atom should be the selected atom")
-  //    }
-  //   }
-  // }
-  //FingerprintsPerElement is an object that holds the element and numbers of fingerprints associated
-  //with that element
-
-  //FingerprintsArray is the array with the fingerprints of that element
 const FingerprintsData = {
   fingerprintsPerElement,
   fingerprintsArray
 }
 
-//Sending Data to  the reducer
+const TwoElementsFingerprintValues = ["bond","bondscreened","radialspin","radialspinscreened"]
+const ThreeElementsFingerprintValues = ["bond", "bondscreened", "bondspin","bondspinscreened"]
+
 useEffect(()=>{
 dispatch(setFingerprints(FingerprintsData))
 },[fingerprintsPerElement,fingerprintsArray, dispatch])
 
+console.log(fingerprintsArray)
 
   return (
     <div className="container mx-auto p-6">
@@ -86,10 +85,124 @@ dispatch(setFingerprints(FingerprintsData))
               <div>
               <input
                 type="text"
-                value={fingerprintsArray[atom][index] || ""}
+                // value={fingerprintsArray[atom][index] || ""}
                 onChange={(e) => handleFingerprintChange(e.target.value, atom, index)}
                 className="w-full sm:w-2/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+
+              {
+                SplittedObj[atom][index] == 1 ? 
+                <div>
+                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                    <option value={""}>Select an option</option>
+                    <option value={"temperature"}>Temperature</option>
+                  </select>
+                </div>
+                : SplittedObj[atom][index] ==2 ?
+                <div>
+                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                  <option value={""}>Select an option</option>
+                  {
+                    TwoElementsFingerprintValues.map((TwoElementsValue)=>(
+                      <option value={TwoElementsValue}>{TwoElementsValue}</option>
+                    ))
+                  }
+                  </select>
+                </div>: 
+                SplittedObj[atom][index] == 3 ?
+                <div>
+                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                    <option value={""}>Select an option</option>
+                   {
+                    ThreeElementsFingerprintValues.map((ThreeElementsValue)=>(
+                      <option value={ThreeElementsValue}>{ThreeElementsValue}</option>
+                    ))
+                   }
+                  </select>
+                </div>:
+                 SplittedObj[atom][index] == 4 ?
+                 <div>
+                    <select  onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                      <option value={""}>Select an option</option>
+                      <option value={"torsion"}>torsion</option>
+                    </select>
+                 </div>:""
+              }
+
+              {
+                SplittedObj[atom][index] == 2 ? 
+                <div>
+                  <div className='flex items-center'>
+                  <label>re:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>rc:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>dr:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>o:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"o", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>n:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"n", paramValue: e.target.value})}></input>
+                  </div>
+                </div> :
+                SplittedObj[atom][index] == 3 ?
+                <div>
+                  <div className='flex items-center'>
+                  <label >re:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label >rc:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>dr:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>m:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"m", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>k:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"k", paramValue: e.target.value})}></input>
+                  </div>
+                </div>
+                :  SplittedObj[atom][index] == 4 ?
+                <div>
+                  <div className='flex items-center'>
+                  <label>re:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>rc:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>dr:</label>
+                  <input defaultValueclassName='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>m:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"m", paramValue: e.target.value})}></input>
+                  </div>
+                  <div className='flex items-center'>
+                  <label>k:</label>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"k", paramValue: e.target.value})}></input>
+                  </div>
+                </div>
+                :""
+              }
+
+           
 
               </div>
 
