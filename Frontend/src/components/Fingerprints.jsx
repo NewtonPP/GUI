@@ -7,6 +7,11 @@ const Fingerprints = ({ atoms = [] }) => {
   const [fingerprintsPerElement, setFingerprintsPerElement] = useState({});
   const [fingerprintsArray, setFingerprintsArray] = useState({});
   const [SplittedObj, setSplittedObj] = useState({})
+  const [FingerPrinttypeChange, setFingerprintTypeChange] = useState("")
+  const [ArrayCreated, setArrayCreated] = useState([])
+  const CreateArray = (count)=>{
+    setArrayCreated(Array(count).fill(""))
+  }
 
   const handleFingerprintCount = (value, atom) => {
     const count = Number(value);
@@ -32,18 +37,71 @@ const Fingerprints = ({ atoms = [] }) => {
     }));
   };
 
-  const handleParameterChange = ({atom, index, fingerprinttype="" , param="" , paramValue=""}) => {
-    setFingerprintsArray((prev) => ({
-      ...prev,
-      [atom]: prev[atom].map((item, i) =>
-        i === index
-          ? { ...item, fingerprinttype:fingerprinttype, params: { ...item.params, [param]: paramValue } }
-          : item
-      ),
-    }));
+  const handleParameterChange = ({ atom, index, fingerprinttype = "", param = "", paramValue = "" }) => {
+    setFingerprintsArray((prev) => {
+      const updatedArray = prev[atom].map((item, i) => {
+        if (i === index) {
+          const updatedParams = { ...item.params, [param]: paramValue };
+  
+          // If 'n' or 'o' are updated, calculate 'alpha' array size
+          if (param === "n" || param === "o") {
+            const n = param === "n" ? parseInt(paramValue, 10) : parseInt(item.params.n || 0, 10);
+            const o = param === "o" ? parseInt(paramValue, 10) : parseInt(item.params.o || 0, 10);
+            if (!isNaN(n) && !isNaN(o) && n >= o) {
+              updatedParams.alpha = Array(n - o + 1).fill(""); // Initialize alpha array
+            }
+          }
+  
+          // If 'k' is updated, initialize the 'alphak' array with size 'k'
+          if (param === "k") {
+            const k = parseInt(paramValue, 10);
+            if (!isNaN(k) && k > 0) {
+              updatedParams.alphak = Array(k).fill(""); // Initialize alphak array
+            }
+          }
+  
+          return { ...item, fingerprinttype, params: updatedParams };
+        }
+        return item;
+      });
+  
+      return { ...prev, [atom]: updatedArray };
+    });
   };
 
+const handleAlphaChange = ({ atom, index, alphaIndex, alphaValue }) => {
+  setFingerprintsArray((prev) => {
+    const updatedArray = prev[atom].map((item, i) => {
+      if (i === index) {
+        const updatedAlpha = [...item.params.alpha];
+        updatedAlpha[alphaIndex] = alphaValue;
+        return { ...item, params: { ...item.params, alpha: updatedAlpha } };
+      }
+      return item;
+    });
 
+    return { ...prev, [atom]: updatedArray };
+  });
+};
+
+
+const handleAlphakChange = ({ atom, index, alphakIndex, alphakValue }) => {
+  setFingerprintsArray((prev) => {
+    const updatedArray = prev[atom].map((item, i) => {
+      if (i === index) {
+        const updatedAlphak = [...item.params.alphak];
+        updatedAlphak[alphakIndex] = alphakValue; // Update specific element in alphak array
+        return { ...item, params: { ...item.params, alphak: updatedAlphak } };
+      }
+      return item;
+    });
+
+    return { ...prev, [atom]: updatedArray };
+  });
+};
+
+
+console.log(fingerprintsArray)
 const FingerprintsData = {
   fingerprintsPerElement,
   fingerprintsArray
@@ -56,7 +114,8 @@ useEffect(()=>{
 dispatch(setFingerprints(FingerprintsData))
 },[fingerprintsPerElement,fingerprintsArray, dispatch])
 
-console.log(fingerprintsArray)
+const FPEdata = useSelector((state)=>state.data.fingerprintsperelement)
+console.log(FPEdata)
 
   return (
     <div className="container mx-auto p-6">
@@ -75,7 +134,7 @@ console.log(fingerprintsArray)
             />
           </div>
 
-          {fingerprintsArray[atom]?.map((_, index) => (
+          {fingerprintsArray[atom]?.map((item, index) => (
             <>
             <div key={index} className="flex flex-col sm:flex-row items-center gap-4 mt-4">
               <label className="font-medium text-gray-700 sm:w-1/3">
@@ -86,21 +145,17 @@ console.log(fingerprintsArray)
               <input
                 type="text"
                 // value={fingerprintsArray[atom][index] || ""}
-                onChange={(e) => handleFingerprintChange(e.target.value, atom, index)}
+                onChange={(e) =>{ handleFingerprintChange(e.target.value, atom, index)
+                  setFingerprintTypeChange("")
+                }}
                 className="w-full sm:w-2/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
               {
-                SplittedObj[atom][index] == 1 ? 
+                SplittedObj[atom][index] === 2 ?
                 <div>
-                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
-                    <option value={""}>Select an option</option>
-                    <option value={"temperature"}>Temperature</option>
-                  </select>
-                </div>
-                : SplittedObj[atom][index] ==2 ?
-                <div>
-                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                  <select onChange={(e)=>{handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})
+                 setFingerprintTypeChange(e.target.value)}}>
                   <option value={""}>Select an option</option>
                   {
                     TwoElementsFingerprintValues.map((TwoElementsValue)=>(
@@ -108,10 +163,20 @@ console.log(fingerprintsArray)
                     ))
                   }
                   </select>
-                </div>: 
-                SplittedObj[atom][index] == 3 ?
+                </div>:
+                SplittedObj[atom][index] === 1 ? 
                 <div>
-                  <select onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                  <select onChange={(e)=>{handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})
+                  setFingerprintTypeChange(e.target.value)}}>
+                    <option value={""}>Select an option</option>
+                    <option value={"temperature"}>Temperature</option>
+                  </select>
+                </div>
+                :  
+                SplittedObj[atom][index] === 3 ?
+                <div>
+                  <select onChange={(e)=>{handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})
+                 setFingerprintTypeChange(e.target.value)}}>
                     <option value={""}>Select an option</option>
                    {
                     ThreeElementsFingerprintValues.map((ThreeElementsValue)=>(
@@ -120,9 +185,10 @@ console.log(fingerprintsArray)
                    }
                   </select>
                 </div>:
-                 SplittedObj[atom][index] == 4 ?
+                 SplittedObj[atom][index] === 4 ?
                  <div>
-                    <select  onChange={(e)=>handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})}>
+                    <select  onChange={(e)=>{handleParameterChange({atom:atom, index:index, fingerprinttype:e.target.value})
+                   setFingerprintTypeChange(e.target.value)}}>
                       <option value={""}>Select an option</option>
                       <option value={"torsion"}>torsion</option>
                     </select>
@@ -130,74 +196,159 @@ console.log(fingerprintsArray)
               }
 
               {
-                SplittedObj[atom][index] == 2 ? 
+                SplittedObj[atom][index] === 2 ? 
                 <div>
                   <div className='flex items-center'>
                   <label>re:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"re", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>rc:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"rc", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>dr:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"dr", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>o:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"o", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"o", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>n:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"n", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>{
+                    handleParameterChange({atom:atom, index:index, fingerprinttype:FingerPrinttypeChange, param :"n", paramValue: e.target.value})}}></input>
                   </div>
+                <div>
+   
+      {item.params.alpha && (
+        <div className="mt-4">
+          <label className="font-medium text-gray-700">
+            Alpha Array:
+          </label>
+          {item.params.alpha.map((alphaValue, alphaIndex) => (
+            <div key={alphaIndex} className="flex items-center gap-2 mt-2">
+              <label>{`Alpha[${alphaIndex}]`}</label>
+              <input
+                type="text"
+                value={alphaValue || ""}
+                onChange={(e) =>
+                  handleAlphaChange({
+                    atom,
+                    index,
+                    alphaIndex,
+                    alphaValue: e.target.value,
+                  })
+                }
+                className="w-20 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
                 </div> :
                 SplittedObj[atom][index] == 3 ?
                 <div>
                   <div className='flex items-center'>
                   <label >re:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"re", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label >rc:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"rc", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>dr:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"dr", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>m:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"m", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"m", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>k:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"k", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"k", paramValue: e.target.value})}></input>
+
+                  {
+  item.params.alphak && (
+    <div className="mt-4">
+      <label className="font-medium text-gray-700">
+        Alphak Array:
+      </label>
+      {item.params.alphak.map((alphakValue, alphakIndex) => (
+        <div key={alphakIndex} className="flex items-center gap-2 mt-2">
+          <label>{`Alphak[${alphakIndex}]`}</label>
+          <input
+            type="text"
+            value={alphakValue || ""}
+            onChange={(e) =>
+              handleAlphakChange({
+                atom,
+                index,
+                alphakIndex,
+                alphakValue: e.target.value,
+              })
+            }
+            className="w-20 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
                   </div>
                 </div>
                 :  SplittedObj[atom][index] == 4 ?
                 <div>
                   <div className='flex items-center'>
                   <label>re:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"re", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"re", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>rc:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"rc", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"rc", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>dr:</label>
-                  <input defaultValueclassName='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"dr", paramValue: e.target.value})}></input>
+                  <input defaultValueclassName='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom,fingerprinttype:FingerPrinttypeChange, index:index, param :"dr", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>m:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"m", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"m", paramValue: e.target.value})}></input>
                   </div>
                   <div className='flex items-center'>
                   <label>k:</label>
-                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index, param :"k", paramValue: e.target.value})}></input>
+                  <input className='h-4 w-40' onChange={(e)=>handleParameterChange({atom:atom, index:index,fingerprinttype:FingerPrinttypeChange, param :"k", paramValue: e.target.value})}></input>
                   </div>
+                  {
+  item.params.alphak && (
+    <div className="mt-4">
+      <label className="font-medium text-gray-700">
+        Alphak Array:
+      </label>
+      {item.params.alphak.map((alphakValue, alphakIndex) => (
+        <div key={alphakIndex} className="flex items-center gap-2 mt-2">
+          <label>{`Alphak[${alphakIndex}]`}</label>
+          <input
+            type="text"
+            value={alphakValue || ""}
+            onChange={(e) =>
+              handleAlphakChange({
+                atom,
+                index,
+                alphakIndex,
+                alphakValue: e.target.value,
+              })
+            }
+            className="w-20 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
                 </div>
                 :""
               }

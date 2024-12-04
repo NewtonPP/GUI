@@ -4,9 +4,11 @@ import path from "path"
 
 
 export const GenerateScripts = (req,res) =>{
+
 try {
     const {atoms, atomicMasses,} = req.body.atomtypes;
     const {fingerprintsPerElement, fingerprintsArray} = req.body.fingerprintsperelement
+
     const {networklayers} = req.body;
     const {calibrationparameters} = req.body
     const {activationfunctions} = req.body
@@ -30,6 +32,52 @@ try {
         scriptContent+=`fingerprintsperelement:${key}:\n`
         scriptContent+=`${fingerprintsPerElement[key]}\n`
     }
+
+
+
+   for (let elem in fingerprintsArray){
+        fingerprintsArray[elem].forEach((fingerprintObj)=>{
+           const {fingerprint, fingerprinttype} = fingerprintObj
+            scriptContent+=`fingerprints:${fingerprint}:\n`
+            scriptContent+=`${fingerprinttype}\n`
+        })
+   }
+
+   for (let elem in fingerprintsArray){
+        fingerprintsArray[elem].forEach((fingerprintObj)=>{
+            const {fingerprint,fingerprinttype, params} = fingerprintObj
+            for (let key in params){
+                if(key === "re")
+                {
+                    scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                    scriptContent+=`${params[key]}\n`
+                }
+                else if(key === "rc")
+                    {
+                        scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                    scriptContent+=`${params[key]}\n`
+                    }
+                else if(key === "alpha"){
+                    scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                        params[key].forEach((alpha)=>{
+                            scriptContent+=alpha
+                            scriptContent+=" "
+                        })
+                        scriptContent+="\n"
+                }
+                else if (key === "alphak"){
+                    scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                    params[key].forEach((alphak)=>{
+                        scriptContent+=alphak
+                        scriptContent+=" "
+                    })
+                    scriptContent+="\n"
+                }
+                }
+           
+        })
+   }
+    
 
     for (let key in networklayers){
         scriptContent+=`networklayers:${key}:\n`
