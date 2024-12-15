@@ -57,6 +57,28 @@ try {
                         scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
                     scriptContent+=`${params[key]}\n`
                     }
+                    else if(key === "dr")
+                        {
+                            scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                        scriptContent+=`${params[key]}\n`
+                        }
+                        else if(key === "o")
+                            {
+                                scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                            scriptContent+=`${params[key]}\n`
+                            }
+
+                            else if(key === "n")
+                                {
+                                    scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                                scriptContent+=`${params[key]}\n`
+                                }
+
+                                else if(key === "m")
+                                    {
+                                        scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
+                                    scriptContent+=`${params[key]}\n`
+                                    }
                 else if(key === "alpha"){
                     scriptContent+=`fingerprintconstants:${fingerprint}:${fingerprinttype}:${key}\n`
                         params[key].forEach((alpha)=>{
