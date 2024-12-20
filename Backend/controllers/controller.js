@@ -4,11 +4,10 @@ import path from "path"
 
 
 export const GenerateScripts = (req,res) =>{
-
 try {
     const {atoms, atomicMasses,} = req.body.atomtypes;
     const {fingerprintsPerElement, fingerprintsArray} = req.body.fingerprintsperelement
-
+    const {screening} = req.body
     const {networklayers} = req.body;
     const {calibrationparameters} = req.body
     const {activationfunctions} = req.body
@@ -100,6 +99,13 @@ try {
         })
    }
     
+
+   for (let key in screening){
+    for ( let c in screening[key]){
+            scriptContent+=`screening:${key}:${c}:\n`
+            scriptContent+=`${screening[key][c]}\n`
+    }
+   }
 
     for (let key in networklayers){
         scriptContent+=`networklayers:${key}:\n`

@@ -125,6 +125,8 @@ const StateEquations = ({ atoms = [] }) => {
   }
   const [stateEquationsPerElement, setStateEquationsPerElement] = useState({});
   const [stateEquationsArray, setStateEquationsArray] = useState({});
+  const [stateEquationConstants, setStateEquationConstants] = useState({})
+
 
   const handleStateEquationsPerElement = (num, atom) => {
     const count = Number(num);
@@ -152,9 +154,25 @@ const StateEquations = ({ atoms = [] }) => {
       return { ...prev, [atom]: updatedArray };
     
     });
-
-    console.log(stateEquationsArray)
   }
+
+  // const HandleStateEquationConstants = (constant, value, atom, idx) =>{
+  //   const newStateEquationConstants= stateEquationConstants
+  //   console.log(newStateEquationConstants[constant]?.value)
+  //   setStateEquationConstants({...newStateEquationConstants, [constant]:{...newStateEquationConstants[constant]?.value,value}})
+
+
+  //   console.log(stateEquationConstants)
+  //   setStateEquationsArray((prev) => {
+  //     const updatedArray = [...(prev[atom] || [])];
+  //     updatedArray[idx] = {...prev[atom][idx], "stateequationconstants":{[constant]:value}};
+  //     return { ...prev, [atom]: updatedArray };
+    
+  //   });
+
+    
+  // }
+
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -264,6 +282,7 @@ const StateEquations = ({ atoms = [] }) => {
                   <input
                     className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder={constant}
+                    onChange={(e)=>{HandleStateEquationConstants(covalent,e.target.value, atom, idx)}}
                   />
                 </div>
               );

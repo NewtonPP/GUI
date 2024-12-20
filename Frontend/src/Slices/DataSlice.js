@@ -8,6 +8,7 @@ const DataSlice = createSlice({
         networklayers:"",
         calibrationparameters:"",
         activationfunctions:"",
+        screening:""
     },
     reducers:{
         setAtomtypes: (state,action)=>{
@@ -24,10 +25,13 @@ const DataSlice = createSlice({
         },
         setActivationFunctions:(state,action)=>{
             state.activationfunctions = action.payload
+        },
+        setScreening:(state,action)=>{
+            state.screening = action.payload
         }
 
     }
 })
 
-export const {setAtomtypes, setFingerprints,setNetworkLayers, setCalibrationparameters, setActivationFunctions} = DataSlice.actions
+export const {setAtomtypes, setFingerprints,setNetworkLayers, setCalibrationparameters, setActivationFunctions, setScreening} = DataSlice.actions
 export default DataSlice.reducer
