@@ -11,6 +11,9 @@ try {
     const {networklayers} = req.body;
     const {calibrationparameters} = req.body
     const {activationfunctions} = req.body
+    const{stateequations} = req.body
+
+    console.log(stateequations)
 
     var scriptContent = ""
     scriptContent+="atomtypes:\n"
@@ -125,6 +128,33 @@ try {
             scriptContent+=`${activationfunctions[key][i]}\n`
         }
     }
+
+    
+    for (let key in stateequations){
+        stateequations[key].forEach((eq)=>{
+          scriptContent+=`stateequations:${eq.equation}:\n`
+          scriptContent+=`${eq.type}\n`
+        })
+
+
+        stateequations[key].forEach((eq)=>{
+            for (let constantKey in eq.stateequationconstants){
+           
+               console.log(eq.stateequationconstants[constantKey])
+               scriptContent+=`stateequationconstants:${eq.equation}:${eq.type}:${constantKey}:\n`
+               if(Array.isArray(eq.stateequationconstants[constantKey])){
+                eq.stateequationconstants[constantKey].forEach((arr)=>{
+                    scriptContent+=`${arr} `
+                })
+                scriptContent+="\n"
+               }
+               else{
+                scriptContent+=`${eq.stateequationconstants[constantKey]}\n`
+               }
+            }
+        })
+    }
+
 
     //For Calibration Parameters
     for (let key in calibrationparameters){

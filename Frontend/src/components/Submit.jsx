@@ -10,13 +10,15 @@ const Submit = () => {
     const calibrationparameters = useSelector((state)=> state.data.calibrationparameters)
     const activationfunctions = useSelector((state)=>state.data.activationfunctions)
     const screening = useSelector((state)=>state.data.screening)
+    const stateequations = useSelector((state)=>state.data.stateequations)
     const Data = {
         atomtypes,
         fingerprintsperelement,
         networklayers,
         calibrationparameters,
         activationfunctions,
-        screening
+        screening,
+        stateequations
     }
     const HandleSubmit = () =>{
         axios.post("http://localhost:5000/generatescripts",Data,{headers:{"Content-Type":"application/json"}})
