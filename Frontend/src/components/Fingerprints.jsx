@@ -101,7 +101,7 @@ const handleAlphakChange = ({ atom, index, alphakIndex, alphakValue }) => {
 };
 
 
-console.log(fingerprintsArray)
+
 const FingerprintsData = {
   fingerprintsPerElement,
   fingerprintsArray
