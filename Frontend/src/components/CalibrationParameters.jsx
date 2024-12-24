@@ -7,28 +7,29 @@ const CalibrationParameters = () => {
 
   const [CalibrationParameters, setCalibrationParameters] = useState({
       algorithm:"",
-      doforces:"",
-      normalizeinput:"",
-      tolerance:"",
-      regularizer:"",
+      dumpdirectory:"",
+      doforces:"0",
+      normalizeinput:"0",
+      tolerance:"0.0000001",
+      regularizer:"0.0002",
       logfile:"",
       potentialoutputfile:"",
-      potentialoutputfrequency:"",
-      maxepochs:"",
-      overwritepotentials:"",
-      debug1freq:"",
-      debug2freq:"",
-      debug3freq:"",
-      debug4freq:"",
-      debug5freq:"",
-      debug6freq:"",
-      adaptiveregularizer:"",
-      lambdainitial:"",
-      lambdaincrease:"",
-      lambdareduce:"",
-      inumweight:"",
+      potentialoutputfrequency:"10",
+      maxepochs:"10000",
+      overwritepotentials:"0",
+      debug1freq:"10",
+      debug2freq:"0",
+      debug3freq:"0",
+      debug4freq:"0",
+      debug5freq:"0",
+      debug6freq:"0",
+      adaptiveregularizer:"0",
+      lambdainitial:"1000",
+      lambdaincrease:"10",
+      lambdareduce:"0.2",
+      inumweight:"1",
       seed:"",
-      targettype:""
+      targettype:"1"
   })
 
   useEffect(()=>{
@@ -58,7 +59,9 @@ return (
         <div className="flex flex-col">
           <label className="text-gray-800 font-medium mb-2">Dump Directory</label>
           <input
+           onChange={(e)=>{setCalibrationParameters({...CalibrationParameters, dumpdirectory:e.target.value})}}
             type="file"
+            webkitdirectory="true"
             className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
         </div>

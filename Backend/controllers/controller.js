@@ -13,7 +13,6 @@ try {
     const {activationfunctions} = req.body
     const{stateequations} = req.body
 
-    console.log(stateequations)
 
     var scriptContent = ""
     scriptContent+="atomtypes:\n"
@@ -139,8 +138,7 @@ try {
 
         stateequations[key].forEach((eq)=>{
             for (let constantKey in eq.stateequationconstants){
-           
-               console.log(eq.stateequationconstants[constantKey])
+    
                scriptContent+=`stateequationconstants:${eq.equation}:${eq.type}:${constantKey}:\n`
                if(Array.isArray(eq.stateequationconstants[constantKey])){
                 eq.stateequationconstants[constantKey].forEach((arr)=>{
@@ -181,6 +179,7 @@ try {
         )
 
 } catch (error) {
+    res.status(400).json({error:error})
     console.log('Error in the GenerateScripts',error)
 }
 }

@@ -114,8 +114,6 @@ useEffect(()=>{
 dispatch(setFingerprints(FingerprintsData))
 },[fingerprintsPerElement,fingerprintsArray, dispatch])
 
-const FPEdata = useSelector((state)=>state.data.fingerprintsperelement)
-console.log(FPEdata)
 
   return (
     <div className="container mx-auto p-6">

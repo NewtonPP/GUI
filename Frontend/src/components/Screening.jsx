@@ -54,10 +54,12 @@ const HandleCmaxData = (atom, CmaxData) =>{
       </h1>
       <div className="grid gap-6 w-full max-w-2xl">
         {CombinationsValue.map((combination) => (
+        
           <div
             key={combination}
             className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
           >
+   
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
                 {combination}:Cmin
@@ -68,7 +70,11 @@ const HandleCmaxData = (atom, CmaxData) =>{
                 placeholder="0.8"
                 type="number"
               />
+              {
+              ScreeningData[combination]?.cmin < 0.8 && <h4 className='text-sm text-red-600'>Cmin should not be less than 0.8</h4>
+              }
             </div>
+       
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 {combination}:Cmax
@@ -79,6 +85,9 @@ const HandleCmaxData = (atom, CmaxData) =>{
                 placeholder="3.2"
                 type="number"
               />
+               {
+              ScreeningData[combination]?.cmax > 3 && <h4 className='text-sm text-red-600'>Cmax should not be greater than 3</h4>
+              }
             </div>
           </div>
         ))}

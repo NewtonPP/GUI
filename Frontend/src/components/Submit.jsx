@@ -22,13 +22,11 @@ const Submit = () => {
     }
     const HandleSubmit = () =>{
         axios.post("http://localhost:5000/generatescripts",Data,{headers:{"Content-Type":"application/json"}})
-        .then((response)=>console.log(response))
-        .catch((error)=>{throw Error})
     }
 
   return (
-    <div>
-      <button onClick={HandleSubmit}>Submit</button>
+    <div className='w-full'>
+      <button onClick={HandleSubmit} className='w-full text-2xl bg-blue-500 flex justify-center items-center text-white font-semibold p-2 hover:bg-blue-700'>Submit</button>
     </div>
   )
 }
