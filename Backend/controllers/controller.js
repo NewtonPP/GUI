@@ -162,8 +162,8 @@ try {
 
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = path.dirname(__filename)
-    const filename = `generatescripts_${Date.now()}.nn`
-    const filepath = path.join(__dirname,"scripts", filename)
+     const filename = `generatescripts_${Date.now()}.nn`
+     const filepath = path.join(__dirname,"scripts", filename)
 
      if(!fs.existsSync(path.join(__dirname,"scripts"))){
         fs.mkdirSync(path.join(__dirname, "scripts"))
@@ -173,7 +173,7 @@ try {
             console.log('Error while generating the script')
         }
         else{
-            res.status(200).json({message:"Success"})
+            res.status(200).json({filename})
         }
     }
         )
@@ -182,4 +182,30 @@ try {
     res.status(400).json({error:error})
     console.log('Error in the GenerateScripts',error)
 }
+}
+
+
+export const DownloadScripts = (req,res) => {
+    const {filename} = req.params
+
+    if (filename.includes("..") || filename.includes("/")) {
+        return res.status(400).json({ error: "Invalid filename." });
+    }
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const filepath = path.join(__dirname, "scripts", filename);
+
+    if (!fs.existsSync(filepath)) {
+        return res.status(404).json({ error: "File not found." });
+    }
+
+        return res.download(filepath, filename, (err) => {
+            if (err) {
+                console.error("Error sending file:", err);
+                return res.status(500).json({ error: "Error downloading file." });
+            }
+          
+        });
+   
 }

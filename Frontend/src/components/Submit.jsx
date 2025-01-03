@@ -20,8 +20,28 @@ const Submit = () => {
         screening,
         stateequations
     }
+    let filename
     const HandleSubmit = () =>{
-        axios.post("http://localhost:5000/generatescripts",Data,{headers:{"Content-Type":"application/json"}})
+        axios.post("http://localhost:5000/generatescripts",Data)
+        .then((response)=>{
+           filename = response.data.filename
+           axios.get(`http://localhost:5000/downloadscripts/${filename}`,{
+            responseType:"blob"
+          })
+          .then((response)=>{
+            console.log(response)
+            const fileUrl = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a")
+            link.href = fileUrl;
+            link.setAttribute("download",`RANNscript_${filename}.nn`)
+            document.body.appendChild(link)
+            link.click();
+            document.body.removeChild(link)
+          })
+          .catch((error)=>console.log(error))
+        })
+
+       
     }
 
   return (
