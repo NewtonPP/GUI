@@ -6,6 +6,7 @@ import { setAtomtypes } from '../Slices/DataSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import StateEquations from './StateEquations.jsx';
 import Screening from './Screening.jsx';
+import NetsPerElement from './NetsPerElement.jsx';
 
 const AtomTypes = () => {
   const dispatch = useDispatch();
@@ -89,9 +90,10 @@ dispatch(setAtomtypes(AtomsDataToSend))
   </div>
   <div>
     {
-      atoms.length>0 && <Networklayers atoms = {atoms}></Networklayers>
+      atoms.length>0 && <NetsPerElement atoms = {atoms}></NetsPerElement>
     }
-  </div><div>
+  </div>
+  <div>
     {
       atoms.length>0 && <StateEquations atoms = {atoms}></StateEquations>
     }

@@ -107,7 +107,7 @@ const FingerprintsData = {
   fingerprintsArray
 }
 
-const TwoElementsFingerprintValues = ["bond","bondscreened","radialspin","radialspinscreened"]
+const TwoElementsFingerprintValues = ["bond","bondscreened","radialspin","radialspinscreened", "radialscreenedexchange_0"]
 const ThreeElementsFingerprintValues = ["bond", "bondscreened", "bondspin","bondspinscreened"]
 
 useEffect(()=>{
