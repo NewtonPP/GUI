@@ -14,11 +14,46 @@ const NetsPerElement = ({ atoms }) => {
   const HandleChangeInNet = (value, index, idx, atom) => {
     setNetData((prev) => {
       const newNetData = [...prev];
-      newNetData[index].Nets[idx] = value;
+      newNetData[index].Nets[idx] = {value};
       return newNetData;
     });
   };
 
+  const HandleChangeInLayerSize = (value, index, idx, atom) =>{
+    setNetData((prev) => {
+      const newNetData = [...prev];
+      newNetData[index].Nets[idx] = {...newNetData[index].Nets[idx],"layersize":value};
+
+      return newNetData;
+    });
+  }
+
+  const HandleChangeInActivation = (value, index, idx, atom) =>{
+    setNetData((prev) => {
+      const newNetData = [...prev];
+      newNetData[index].Nets[idx] = {...newNetData[index].Nets[idx],"activation":value};
+
+      return newNetData;
+    });
+  }
+
+  const HandleChangeInFingerprintMap = (value, index, idx, atom) =>{
+    setNetData((prev) => {
+      const newNetData = [...prev];
+      newNetData[index].Nets[idx] = {...newNetData[index].Nets[idx],"fingerprintmap":value};
+
+      return newNetData;
+    });
+  }
+
+  const HandleChangeInOrder = (value, index, idx, atom) =>{
+    setNetData((prev) => {
+      const newNetData = [...prev];
+      newNetData[index].Nets[idx] = {...newNetData[index].Nets[idx],"order":value};
+
+      return newNetData;
+    });
+  }
   console.log(NetData);
 
   return (
@@ -43,7 +78,7 @@ const NetsPerElement = ({ atoms }) => {
                 <div>
                   <label className="block text-lg font-medium text-gray-600">Select Net Type</label>
                   <select
-                    onChange={(e) => { HandleChangeInNet(e.target.value, index, idx, atom) }}
+                    onChange={(e) => {HandleChangeInNet(e.target.value, index, idx, atom) }}
                     className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                   >
                     <option value="">Select</option>
@@ -52,13 +87,14 @@ const NetsPerElement = ({ atoms }) => {
                   </select>
                 </div>
 
-                {NetData[index]?.Nets[idx] === "default_0" ? (
+                {NetData[index]?.Nets[idx]?.value === "default_0" ? (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-lg font-medium text-gray-600">Layer Size</label>
                       <input
                         placeholder="Enter comma separated values"
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e)=>HandleChangeInLayerSize(e.target.value, index, idx, atom)}
                       />
                     </div>
 
@@ -66,6 +102,7 @@ const NetsPerElement = ({ atoms }) => {
                       <label className="block text-lg font-medium text-gray-600">Activation</label>
                       <select
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e)=>{HandleChangeInActivation(e.target.value, index, idx, atom)}}
                       >
                         <option value="">Select</option>
                         <option value="SigI">SigI</option>
@@ -77,6 +114,7 @@ const NetsPerElement = ({ atoms }) => {
                       <label className="block text-lg font-medium text-gray-600">Fingerprint Map</label>
                       <select
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e)=>{HandleChangeInFingerprintMap(e.target.value, index, idx, atom)}}
                       >
                         <option value="">Select</option>
                         <option value="radialscreened_0">radialscreened_0</option>
@@ -84,13 +122,14 @@ const NetsPerElement = ({ atoms }) => {
                       </select>
                     </div>
                   </div>
-                ) : NetData[index]?.Nets[idx] === "exchangespin_0" ? (
+                ) : NetData[index]?.Nets[idx]?.value === "exchangespin_0" ? (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-lg font-medium text-gray-600">Layer Size</label>
                       <input
                         placeholder="Enter comma separated values"
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e) => {HandleChangeInLayerSize(e.target.value, index, idx, atom) }}
                       />
                     </div>
 
@@ -98,6 +137,7 @@ const NetsPerElement = ({ atoms }) => {
                       <label className="block text-lg font-medium text-gray-600">Activation</label>
                       <select
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e)=>{HandleChangeInActivation(e.target.value, index, idx, atom)}}
                       >
                         <option value="">Select</option>
                         <option value="SigI">SigI</option>
@@ -109,6 +149,7 @@ const NetsPerElement = ({ atoms }) => {
                       <label className="block text-lg font-medium text-gray-600">Fingerprint Map</label>
                       <select
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={(e)=>{HandleChangeInFingerprintMap(e.target.value, index, idx, atom)}}
                       >
                         <option value="">Select</option>
                         <option value="radialscreened_0">radialscreened_0</option>
@@ -122,6 +163,7 @@ const NetsPerElement = ({ atoms }) => {
                         type="number"
                         placeholder="Enter a number"
                         className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange = {(e) =>{HandleChangeInOrder = (e.target.value, index, idx, atom)}}
                       />
                     </div>
                   </div>
