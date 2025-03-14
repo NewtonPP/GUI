@@ -12,6 +12,7 @@ try {
     const {calibrationparameters} = req.body
     const {activationfunctions} = req.body
     const{stateequations} = req.body
+    const{netsperelement} = req.body
 
 
     var scriptContent = ""
@@ -158,6 +159,40 @@ try {
     for (let key in calibrationparameters){
         scriptContent+=`calibrationparameters:${key}:\n`
         scriptContent+=`${calibrationparameters[key]}\n`
+    }
+
+    for (let idx in netsperelement){
+        scriptContent+=`nets:${netsperelement[idx].atom}:\n`
+        for (let i in netsperelement[idx].Nets){
+            if(netsperelement[idx]?.Nets[i]?.value){
+                 scriptContent+=`${netsperelement[idx]?.Nets[i]?.value} `
+            }
+          
+        }
+        scriptContent+=`\n`
+    }
+    for (let idx in netsperelement){
+        scriptContent+=`nets:${netsperelement[idx].atom}:\n`
+        for (let i in netsperelement[idx].Nets){
+            if(netsperelement[idx]?.Nets[i]?.value){
+                 scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:layersize:\n`
+                 for(let layer in netsperelement[idx]?.Nets[i]?.layersize){
+                    scriptContent+=`${netsperelement[idx]?.Nets[i]?.layersize[layer]} `
+                 }
+                 scriptContent+=`\n`
+
+                 scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:activation:\n`
+                 scriptContent+=`${netsperelement[idx]?.Nets[i]?.activation}\n`
+                 scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:fingerprintmap:\n`
+                 scriptContent+=`${netsperelement[idx]?.Nets[i]?.fingerprintmap}\n`
+                 if(netsperelement[idx].Nets[i].order){
+                    scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:order:\n`
+                    scriptContent+=`${netsperelement[idx]?.Nets[i]?.order}\n`
+                 }
+            }
+          
+        }
+
     }
 
     const __filename = fileURLToPath(import.meta.url)

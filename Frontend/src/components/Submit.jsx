@@ -11,6 +11,7 @@ const Submit = () => {
     const activationfunctions = useSelector((state)=>state.data.activationfunctions)
     const screening = useSelector((state)=>state.data.screening)
     const stateequations = useSelector((state)=>state.data.stateequations)
+    const netsperelement = useSelector((state)=>state.data.netsperelement)
     const Data = {
         atomtypes,
         fingerprintsperelement,
@@ -18,7 +19,8 @@ const Submit = () => {
         calibrationparameters,
         activationfunctions,
         screening,
-        stateequations
+        stateequations,
+        netsperelement
     }
     let filename
     const HandleSubmit = () =>{
