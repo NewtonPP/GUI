@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { setFingerprints } from '../Slices/DataSlice.js';
 import { useSelector, useDispatch } from 'react-redux';
+import NetsPerElement from './NetsPerElement.jsx';
 
 const Fingerprints = ({ atoms = [] }) => {
   const dispatch = useDispatch();
@@ -380,6 +381,11 @@ dispatch(setFingerprints(FingerprintsData))
           ))}
         </div>
       ))}
+    <div>
+    {
+      atoms.length>0 && <NetsPerElement atoms = {atoms} fingerprints = {fingerprintsArray}></NetsPerElement>
+    }
+  </div>
     </div>
   );
 };

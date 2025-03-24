@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setNetsPerElement } from '../Slices/DataSlice';
 
-const NetsPerElement = ({ atoms }) => {
+const NetsPerElement = ({ atoms, fingerprints }) => {
   const [NetData, setNetData] = useState([]); // Initialize as an empty array
+  const [FPS, setFPS] = useState({}); // Initialize FPS state
   const dispatch = useDispatch();
 
   const HandleChangeInNumber = (Number, atom, index) => {
@@ -76,10 +77,23 @@ const NetsPerElement = ({ atoms }) => {
     });
   };
 
-  console.log(NetData);
+  useEffect(() => {
+    const newFPS = {};
+
+    for (const key in fingerprints) {
+      const fingerprintTypes = fingerprints[key].map(
+        (item) => item.fingerprinttype
+      );
+      newFPS[key] = fingerprintTypes;
+    }
+
+    setFPS(newFPS); 
+  }, [fingerprints]);
+
+  console.log(FPS)
 
   useEffect(() => {
-    dispatch(setNetsPerElement(NetData));
+    dispatch(setNetsPerElement(NetData)); 
   }, [dispatch, NetData]);
 
   return (
@@ -124,6 +138,7 @@ const NetsPerElement = ({ atoms }) => {
                     </select>
                   </div>
 
+                  {/* Handle conditional rendering based on net type */}
                   {NetData[index]?.Nets[idx]?.value === "default_0" ? (
                     <div className="space-y-4">
                       <div>

@@ -88,11 +88,7 @@ dispatch(setAtomtypes(AtomsDataToSend))
       atoms.length>0 && <Fingerprints atoms = {atoms}></Fingerprints>
     }
   </div>
-  <div>
-    {
-      atoms.length>0 && <NetsPerElement atoms = {atoms}></NetsPerElement>
-    }
-  </div>
+
   <div>
     {
       atoms.length>0 && <StateEquations atoms = {atoms}></StateEquations>
