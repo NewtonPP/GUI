@@ -184,7 +184,10 @@ try {
                  scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:activation:\n`
                  scriptContent+=`${netsperelement[idx]?.Nets[i]?.activation}\n`
                  scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:fingerprintmap:\n`
-                 scriptContent+=`${netsperelement[idx]?.Nets[i]?.fingerprintmap}\n`
+                 netsperelement[idx]?.Nets[i]?.fingerprintmap.forEach((fpm)=> {
+                   console.log(fpm)
+                 });
+                 scriptContent+=`\n`
                  if(netsperelement[idx].Nets[i].order){
                     scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:order:\n`
                     scriptContent+=`${netsperelement[idx]?.Nets[i]?.order}\n`

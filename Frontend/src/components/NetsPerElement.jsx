@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNetsPerElement } from '../Slices/DataSlice';
+import CreatableSelect from 'react-select/creatable';
 
 const NetsPerElement = ({ atoms, fingerprints }) => {
   const [NetData, setNetData] = useState([]); // Initialize as an empty array
@@ -82,7 +83,7 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
 
     for (const key in fingerprints) {
       const fingerprintTypes = fingerprints[key].map(
-        (item) => item.fingerprinttype
+        (item) => ({value:item.fingerprinttype,label:item.fingerprinttype})
       );
       newFPS[key] = fingerprintTypes;
     }
@@ -90,7 +91,22 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
     setFPS(newFPS); 
   }, [fingerprints]);
 
-  console.log(FPS)
+
+  const HandleFingerprintSelection = (values, atom, index, idx) =>{
+    setNetData((prev) => {
+      const newNetData = [...prev];
+      newNetData[index] = { ...newNetData[index] };
+      newNetData[index].Nets = [...newNetData[index].Nets];
+      newNetData[index].Nets[idx] = {
+        ...newNetData[index].Nets[idx],
+        fingerprintmap: values.map((fpm)=>fpm.value),
+      };
+      return newNetData;
+    });
+  }
+
+
+  console.log(NetData)
 
   useEffect(() => {
     dispatch(setNetsPerElement(NetData)); 
@@ -174,16 +190,22 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
                         <label className="block text-lg font-medium text-gray-600">
                           Fingerprint Map
                         </label>
-                        <select
+                        <CreatableSelect isMulti options={FPS[atom]} onChange={(e)=>HandleFingerprintSelection(e, atom, index, idx)}/>
+                        {/* <select
                           className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                           onChange={(e) => {
                             HandleChangeInFingerprintMap(e.target.value, index, idx, atom);
                           }}
                         >
-                          <option value="">Select</option>
-                          <option value="radialscreened_0">radialscreened_0</option>
-                          <option value="bondscreened_0">bondscreened_0</option>
-                        </select>
+                            <option>Select</option>
+                          {
+                            FPS[atom].map((fp)=>(
+                            
+                            fp?<option>{fp}</option>:""
+                          
+                            ))
+                          }
+                        </select> */}
                       </div>
                     </div>
                   ) : NetData[index]?.Nets[idx]?.value === "exchangespin_0" ? (
@@ -221,16 +243,22 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
                         <label className="block text-lg font-medium text-gray-600">
                           Fingerprint Map
                         </label>
-                        <select
+                        <CreatableSelect isMulti options={FPS[atom]} onChange={(e)=>HandleFingerprintSelection(e, atom, index, idx)}/>
+                        {/* <select
                           className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                           onChange={(e) => {
                             HandleChangeInFingerprintMap(e.target.value, index, idx, atom);
                           }}
                         >
-                          <option value="">Select</option>
-                          <option value="radialscreened_0">radialscreened_0</option>
-                          <option value="bondscreened_0">bondscreened_0</option>
-                        </select>
+                          <option>Select</option>
+                          {
+                            FPS[atom].map((fp)=>(
+                            
+                            fp?<option>{fp.value}</option>:""
+                          
+                            ))
+                          }
+                        </select> */}
                       </div>
 
                       <div>
