@@ -185,7 +185,7 @@ try {
                  scriptContent+=`${netsperelement[idx]?.Nets[i]?.activation}\n`
                  scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:fingerprintmap:\n`
                  netsperelement[idx]?.Nets[i]?.fingerprintmap.forEach((fpm)=> {
-                   console.log(fpm)
+                   scriptContent+=`${fpm} `
                  });
                  scriptContent+=`\n`
                  if(netsperelement[idx].Nets[i].order){
