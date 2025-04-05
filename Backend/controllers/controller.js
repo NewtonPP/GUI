@@ -5,6 +5,7 @@ import path from "path"
 
 export const GenerateScripts = (req,res) =>{
 try {
+
     const {atoms, atomicMasses,} = req.body.atomtypes;
     const {fingerprintsPerElement, fingerprintsArray} = req.body.fingerprintsperelement
     const {screening} = req.body
@@ -13,7 +14,6 @@ try {
     const {activationfunctions} = req.body
     const{stateequations} = req.body
     const{netsperelement} = req.body
-
 
     var scriptContent = ""
     scriptContent+="atomtypes:\n"
@@ -184,7 +184,7 @@ try {
                  scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:activation:\n`
                  scriptContent+=`${netsperelement[idx]?.Nets[i]?.activation}\n`
                  scriptContent+=`netconstants:${netsperelement[idx].atom}:${netsperelement[idx]?.Nets[i]?.value}:fingerprintmap:\n`
-                 netsperelement[idx]?.Nets[i]?.fingerprintmap.forEach((fpm)=> {
+                 netsperelement[idx]?.Nets[i]?.fingerprintmap?.forEach((fpm)=> {
                    scriptContent+=`${fpm} `
                  });
                  scriptContent+=`\n`
@@ -195,7 +195,7 @@ try {
             }
           
         }
-
+      
     }
 
     const __filename = fileURLToPath(import.meta.url)
