@@ -24,10 +24,10 @@ const Submit = () => {
     }
     let filename
     const HandleSubmit = () =>{
-        axios.post("http://localhost:5000/generatescripts",Data)
+        axios.post(`${import.meta.env.VITE_API_URL}/generatescripts`,Data)
         .then((response)=>{
            filename = response.data.filename
-           axios.get(`http://localhost:5000/downloadscripts/${filename}`,{
+           axios.get(`${import.meta.env.VITE_API_URL}/downloadscripts/${filename}`,{
             responseType:"blob"
           })
           .then((response)=>{
