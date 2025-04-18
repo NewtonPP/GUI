@@ -5,7 +5,9 @@ import { Route } from "./routes/route.js";
 
 const app = express();
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: 'https://mlrann.netlify.app',
+  }))
 app.use(Route)
 const PORT =5000;
 app.listen(PORT,()=>{
