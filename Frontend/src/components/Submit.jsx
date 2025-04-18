@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
+import { LoadingContext } from '../../Contexts/LoadingContext'
 
 
 const Submit = () => {
@@ -22,8 +23,10 @@ const Submit = () => {
         stateequations,
         netsperelement
     }
+    const {setIsLoading} = useContext(LoadingContext)
     let filename
     const HandleSubmit = () =>{
+      setIsLoading(true)
         axios.post(`${import.meta.env.VITE_API_URL}generatescripts`,Data)
         .then((response)=>{
            filename = response.data.filename
@@ -31,14 +34,14 @@ const Submit = () => {
             responseType:"blob"
           })
           .then((response)=>{
-            console.log(response)
             const fileUrl = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a")
             link.href = fileUrl;
-            link.setAttribute("download",`RANNscript_${filename}.nn`)
+            link.setAttribute("download",`RANNscript_${filename}`)
             document.body.appendChild(link)
             link.click();
             document.body.removeChild(link)
+            setIsLoading(false)
           })
           .catch((error)=>console.log(error))
         })
