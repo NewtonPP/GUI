@@ -6,8 +6,8 @@ const CalibrationParameters = () => {
   const algorithms = ["LMch", "CG", "LMSearch", "bfgs"];  
 
   const [CalibrationParameters, setCalibrationParameters] = useState({
-      algorithm:"",
-      dumpdirectory:"",
+      algorithm:"LMch",
+      dumpdirectory:".",
       doforces:"0",
       normalizeinput:"0",
       tolerance:"0.0000001",

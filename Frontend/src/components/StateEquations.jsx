@@ -529,7 +529,7 @@ const data = useSelector((state)=>state.data.stateequations)
                         type="text"
                         id={`equation-${atom}-${idx}`}
                         className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder={`Enter equation ${idx + 1}`}
+                        placeholder={`Enter equation ${idx + 1}. Ex: Li_Li`}
                         onChange={(e) =>
                           HandleStateEquationsPerElementChange(
                             e.target.value,

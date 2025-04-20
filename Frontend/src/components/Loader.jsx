@@ -5,7 +5,7 @@ const Loader = () => {
   
   <div className="h-screen w-full flex justify-center items-center flex-col">
         <ClipLoader color="#36d7b7" size={50} />
-        <p>Loading...</p>
+        <p>Downloading...</p>
     </div>);
 };
 export default Loader

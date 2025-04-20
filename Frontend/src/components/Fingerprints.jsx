@@ -141,14 +141,17 @@ dispatch(setFingerprints(FingerprintsData))
               </label>
 
               <div>
+              <p className='text-red-700'>Enter elements separated by '_'</p>
               <input
                 type="text"
                 // value={fingerprintsArray[atom][index] || ""}
+                placeholder='Ex: H_H_H'
                 onChange={(e) =>{ handleFingerprintChange(e.target.value, atom, index)
                   setFingerprintTypeChange("")
                 }}
                 className="w-full sm:w-2/3 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              
 
               {
                 SplittedObj[atom][index] === 2 ?

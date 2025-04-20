@@ -215,7 +215,7 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
                           Layer Size
                         </label>
                         <input
-                          placeholder="Enter comma separated values"
+                          placeholder="Enter comma separated values. Ex: 24,10,13"
                           className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                           onChange={(e) => {
                             HandleChangeInLayerSize(e.target.value, index, idx, atom);
