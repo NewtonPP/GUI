@@ -10,7 +10,6 @@ import Loader from "./components/Loader.jsx"
 
 function App() {
   const {isLoading, setIsLoading} = useContext(LoadingContext)
-  console.log(import.meta.env.VITE_API_URL)
   return (
     <>
     <Provider store={store}>

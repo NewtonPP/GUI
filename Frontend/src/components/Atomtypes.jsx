@@ -67,7 +67,7 @@ dispatch(setAtomtypes(AtomsDataToSend))
                 <option value="" disabled>
                   Select an atom
                 </option>
-                {PeriodicTable.map((atom) => (
+                {PeriodicTable.map((atom, i) => (
                   <option key={atom.symbol} value={atom.symbol}>
                     {atom.symbol}
                   </option>

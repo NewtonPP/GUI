@@ -60,7 +60,7 @@ return (
           <label className="text-gray-800 font-medium mb-2">Dump Directory</label>
           <input
            onChange={(e)=>{setCalibrationParameters({...CalibrationParameters, dumpdirectory:e.target.value})}}
-            type="file"
+            type="text"
             webkitdirectory="true"
             className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />

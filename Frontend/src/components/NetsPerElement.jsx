@@ -106,8 +106,6 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
   }
 
 
-  console.log(NetData)
-
   useEffect(() => {
     dispatch(setNetsPerElement(NetData)); 
   }, [dispatch, NetData]);
