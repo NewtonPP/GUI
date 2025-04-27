@@ -1,5 +1,5 @@
 import express from "express"
-import { DownloadScripts, GenerateScripts } from "../controllers/controller.js";
+import { GenerateScripts } from "../controllers/controller.js";
 
 export const Route = express.Router();
 

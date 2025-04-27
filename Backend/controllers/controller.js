@@ -15,7 +15,6 @@ export const GenerateScripts = async (req, res) => {
 
         const lines = [];
 
-        // Atom types
         lines.push("atomtypes:");
         lines.push(atoms.join(" "));
 
