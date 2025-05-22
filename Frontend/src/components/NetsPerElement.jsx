@@ -6,6 +6,9 @@ import CreatableSelect from 'react-select/creatable';
 const NetsPerElement = ({ atoms, fingerprints }) => {
   const [NetData, setNetData] = useState([]); // Initialize as an empty array
   const [FPS, setFPS] = useState({}); // Initialize FPS state
+  const ActivationValues = ["capped","cappedsharp","cappedshift","linear","sharpcapped","sigl","slowcapped","tanh",
+    "tanhtwist","ttanh","zero"
+  ]
   const dispatch = useDispatch();
 
   const HandleChangeInNumber = (Number, atom, index) => {
@@ -33,24 +36,32 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
       newNetData[index].Nets = [...newNetData[index].Nets];
       newNetData[index].Nets[idx] = {
         ...newNetData[index].Nets[idx],
-        layersize: value,
+        layersize: value.split(","),
+        NumberOfLayer:value.split(",")
       };
       return newNetData;
     });
   };
+console.log(NetData)
+const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
+  setNetData((prev) => {
+    const newNetData = [...prev];
+    const net = newNetData[index].Nets[idx];
 
-  const HandleChangeInActivation = (value, index, idx, atom) => {
-    setNetData((prev) => {
-      const newNetData = [...prev];
-      newNetData[index] = { ...newNetData[index] };
-      newNetData[index].Nets = [...newNetData[index].Nets];
-      newNetData[index].Nets[idx] = {
-        ...newNetData[index].Nets[idx],
-        activation: value,
-      };
-      return newNetData;
-    });
-  };
+    const updatedActivations = [...(net.activation || [])];
+    updatedActivations[layerIdx] = value;
+
+    newNetData[index] = { ...newNetData[index] };
+    newNetData[index].Nets = [...newNetData[index].Nets];
+    newNetData[index].Nets[idx] = {
+      ...net,
+      activation: updatedActivations,
+    };
+
+    return newNetData;
+  });
+};
+
 
   const HandleChangeInFingerprintMap = (value, index, idx, atom) => {
     setNetData((prev) => {
@@ -124,6 +135,7 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
             </label>
             <input
               type="number"
+              min='0'
               placeholder="Enter number of nets"
               onChange={(e) =>
                 HandleChangeInNumber(Number(e.target.value), atom, index)
@@ -133,7 +145,7 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
           </div>
 
           {NetData[index] &&
-            NetData[index].Nets?.map((_, idx) => {
+            NetData[index].Nets?.map((net, idx) => {
               return (
                 <div key={idx} className="space-y-4">
                   <div>
@@ -172,16 +184,24 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
                         <label className="block text-lg font-medium text-gray-600">
                           Activation
                         </label>
-                        <select
-                          className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          onChange={(e) => {
-                            HandleChangeInActivation(e.target.value, index, idx, atom);
-                          }}
-                        >
-                          <option value="">Select</option>
-                          <option value="SigI">SigI</option>
-                          <option value="linear">Linear</option>
-                        </select>
+                       {net?.NumberOfLayer?.map((_, layerIdx) =>
+  layerIdx !== net?.NumberOfLayer?.length - 1 ? (
+    <div key={layerIdx}>
+      <select
+        className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        onChange={(e) =>
+          HandleChangeInActivation(e.target.value, index, idx, atom, layerIdx)
+        }
+      >
+        <option value="">Select Activation</option>
+        {ActivationValues.map((activation, i) => (
+          <option key={i} value={activation}>{activation}</option>
+        ))}
+      </select>
+    </div>
+  ) : null
+)}
+
                       </div>
 
                       <div>
@@ -225,16 +245,25 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
                         <label className="block text-lg font-medium text-gray-600">
                           Activation
                         </label>
-                        <select
+                        {
+                          net?.NumberOfLayer?.map((l, idx)=>{
+                            return (
+                             idx != net?.NumberOfLayer?.length-1 ?  <select
                           className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                           onChange={(e) => {
                             HandleChangeInActivation(e.target.value, index, idx, atom);
                           }}
                         >
                           <option value="">Select</option>
-                          <option value="SigI">SigI</option>
-                          <option value="linear">Linear</option>
-                        </select>
+                          {
+                            ActivationValues.map((activation)=>(
+                               <option value={activation}>{activation}</option>
+                            ))
+                          }
+                        </select>:""
+                            )
+                          })
+                        }
                       </div>
 
                       <div>

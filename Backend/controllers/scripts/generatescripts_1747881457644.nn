@@ -1,45 +1,15 @@
 atomtypes:
-H He 
-mass:H:
-1.008
+He
 mass:He:
 4.0026022
-fingerprintsperelement:H:
-1
-fingerprintsperelement:He:
-1
-fingerprints:H_H:
-bond
-fingerprints:He:
-temperature
-fingerprintconstants:H_H:bond:re
-3
-fingerprintconstants:H_H:bond:rc
-4
-fingerprintconstants:H_H:bond:dr
-5
-fingerprintconstants:H_H:bond:o
-6
-fingerprintconstants:H_H:bond:n
-7
-fingerprintconstants:H_H:bond:alpha
-3 2 
-screening:H_H_H:cmin:
-3
-screening:H_H_H:cmax:
-3
-screening:H_H_He:cmin:
-3
-screening:H_H_He:cmax:
-2
 calibrationparameters:algorithm:
-CG
+LMch
 calibrationparameters:dumpdirectory:
 .
 calibrationparameters:doforces:
-1
+0
 calibrationparameters:normalizeinput:
-1
+0
 calibrationparameters:tolerance:
 0.0000001
 calibrationparameters:regularizer:
@@ -80,29 +50,17 @@ calibrationparameters:seed:
 
 calibrationparameters:targettype:
 1
-nets:H:
-default_0 exchangespin_0 
 nets:He:
-default_0 
-nets:H:
-netconstants:H:default_0:layersize:
-2 
-netconstants:H:default_0:activation:
-SigI
-netconstants:H:default_0:fingerprintmap:
-bond 
-netconstants:H:exchangespin_0:layersize:
-3 
-netconstants:H:exchangespin_0:activation:
-linear
-netconstants:H:exchangespin_0:fingerprintmap:
-bond 
-netconstants:H:exchangespin_0:order:
-1
-nets:He:
+default_0 exchangespin_0
 netconstants:He:default_0:layersize:
-2 
+2 3 4
 netconstants:He:default_0:activation:
-linear
+tanhtwist
 netconstants:He:default_0:fingerprintmap:
-
+undefined
+netconstants:He:exchangespin_0:layersize:
+3 4
+netconstants:He:exchangespin_0:activation:
+undefined
+netconstants:He:exchangespin_0:fingerprintmap:
+undefined

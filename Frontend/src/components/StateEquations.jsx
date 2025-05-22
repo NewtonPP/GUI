@@ -505,6 +505,7 @@ const data = useSelector((state)=>state.data.stateequations)
               </label>
               <input
                 type="number"
+                min="0"
                 id={`state-equations-${atom}`}
                 className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="Enter number of equations"
