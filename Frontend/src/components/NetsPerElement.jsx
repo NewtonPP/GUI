@@ -43,6 +43,7 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
     });
   };
 console.log(NetData)
+
 const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
   setNetData((prev) => {
     const newNetData = [...prev];
@@ -61,6 +62,7 @@ const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
     return newNetData;
   });
 };
+
 
 
   const HandleChangeInFingerprintMap = (value, index, idx, atom) => {
@@ -245,25 +247,23 @@ const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
                         <label className="block text-lg font-medium text-gray-600">
                           Activation
                         </label>
-                        {
-                          net?.NumberOfLayer?.map((l, idx)=>{
-                            return (
-                             idx != net?.NumberOfLayer?.length-1 ?  <select
-                          className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          onChange={(e) => {
-                            HandleChangeInActivation(e.target.value, index, idx, atom);
-                          }}
-                        >
-                          <option value="">Select</option>
-                          {
-                            ActivationValues.map((activation)=>(
-                               <option value={activation}>{activation}</option>
-                            ))
-                          }
-                        </select>:""
-                            )
-                          })
-                        }
+                        {net?.NumberOfLayer?.map((_, layerIdx) =>
+  layerIdx !== net?.NumberOfLayer?.length - 1 ? (
+    <div key={layerIdx}>
+      <select
+        className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        onChange={(e) =>
+          HandleChangeInActivation(e.target.value, index, idx, atom, layerIdx)
+        }
+      >
+        <option value="">Select Activation</option>
+        {ActivationValues.map((activation, i) => (
+          <option key={i} value={activation}>{activation}</option>
+        ))}
+      </select>
+    </div>
+  ) : null
+)}
                       </div>
 
                       <div>
