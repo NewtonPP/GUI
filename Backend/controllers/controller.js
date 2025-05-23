@@ -59,7 +59,6 @@ export const GenerateScripts = async (req, res) => {
                 lines.push(`activationfunctions:${key}:${i}:\n${activationfunctions[key][i]}`);
             }
         }
-
         for (let key in stateequations) {
             stateequations[key].forEach(({ equation, type, stateequationconstants }) => {
                 lines.push(`stateequations:${equation}:\n${type}`);
@@ -81,9 +80,8 @@ export const GenerateScripts = async (req, res) => {
 
             for (let net of entry.Nets) {
                 if (!net?.value) continue;
-                console.log(net)
                 lines.push(`netconstants:${entry.atom}:${net.value}:layersize:\n${net.layersize.join(" ")}`);
-                lines.push(`netconstants:${entry.atom}:${net.value}:activation:\n${net.activation}`);
+                lines.push(`netconstants:${entry.atom}:${net.value}:activation:\n${net.activation.join(" ")}`);
                 lines.push(`netconstants:${entry.atom}:${net.value}:fingerprintmap:\n${net?.fingerprintmap?.join(" ")}`);
                 if (net.order) {
                     lines.push(`netconstants:${entry.atom}:${net.value}:order:\n${net.order}`);
@@ -110,19 +108,19 @@ export const GenerateScripts = async (req, res) => {
         res.status(400).json({ error });
     }
 };
-// Download handler
+
 export const DownloadScript = async (req, res) => {
     try {
         const { filename } = req.params;
         const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
+        const __dirname = path.dirname(__filename); 
         const filepath = path.join(__dirname, "scripts", filename);
 
         if (!fs.existsSync(filepath)) {
             return res.status(404).json({ error: "File not found" });
         }
 
-        res.download(filepath, filename); // This triggers the download on the client
+        res.download(filepath, filename); 
     } catch (error) {
         console.error('Error in DownloadScript:', error);
         res.status(500).json({ error: "Failed to download script" });

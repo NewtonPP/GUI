@@ -42,7 +42,6 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
       return newNetData;
     });
   };
-console.log(NetData)
 
 const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
   setNetData((prev) => {

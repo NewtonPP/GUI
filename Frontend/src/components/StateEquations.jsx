@@ -15,479 +15,143 @@ const StateEquations = ({ atoms = [] }) => {
     "zbl",
   ];
 
-  const HandleCovalent = (n) =>{
-    const covalent ={
-      "ec":Array(n).fill(""),
-      "a":Array(n).fill(""),
-      "rc":Array(1).fill(""),
-      "b":Array(n).fill(""),
-      "c":Array(n).fill(""),
-      "dr":Array(n).fill("")
-    }
-    return covalent
-  }
-
-  const [Covalent,SetCovalent] = useState({ "ec":[],
-    "a":[],
-    "rc":[],
-    "b":[],
-    "c":[],
-    "dr":[]})
-
-    const HandleCovalentChange = (atom, equation, constant, value, index, idx) => {
-  
-      const newcovalent = {...Covalent};
-      newcovalent[constant] = [...newcovalent[constant]]; 
-      newcovalent[constant][index] = value;
-
-      SetCovalent(newcovalent);
-
-      if (
-        stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-        stateEquationsArray?.[atom]?.[idx]?.type === "covalent"
-      ) {
-        setStateEquationsArray((prevState) => {
-
-          const updatedState = { ...prevState };
-    
-          updatedState[atom] = Array.isArray(prevState[atom])
-            ? [...prevState[atom]]
-            : [];
-          updatedState[atom][idx] = {
-            ...updatedState[atom][idx], 
-            stateequationconstants: Covalent,
-          };
-          return updatedState;
-        });
-      }   
+  const initialState = {
+    covalent: {
+      ec: [], a: [], rc: [], b: [], c: [], dr: []
+    },
+    eamscreened: {
+      ec: [], re: [], rc: [], alpha: [], delta: [], dr: [],
+      cweight: [], beta: [], Asub: [], lat: ""
+    },
+    repulse: { b: "", rc: "", alpha: "", dr: "" },
+    rose: { b: "", rc: "", alpha: "", delta: "", dr: "" },
+    rosescreened: { ec: "", re: "", rc: "", alpha: "", delta: "", dr: "" },
+    spinbiquadratic: { aJ: "", bJ: "", dJ: "", aK: "", bK: "", rc: "", dr: "" },
+    spinj: { a: "", re: "", rc: "", b: "", dr: "" },
+    spinjscreened: { a: "", re: "", rc: "", b: "", dr: "" },
+    zbl: { zi: "", zj: "", rc: "", dr: "" }
   };
-  
-  const HandleEamscreened = (n) =>{
-    const eamscreened = {
-      "ec":Array(n *n).fill(""),
-      "re":Array(n *n).fill(""),
-      "rc":Array(n *n).fill(""),
-      "alpha":Array(n *n).fill(""),
-      "delta":Array(n *n).fill(""),
-      "dr":Array(n *n).fill(""),
-      "cweight":Array(n).fill(""),
-      "beta":Array(n).fill(""),
-      "Asub":Array(n).fill(""),
-      "lat":["b1", "b2","bcc","ch4","dia","dim","fcc","hcp","l12"]
-    }
 
-    return eamscreened
-  }
-
-  const [EamScrenedData, setEamScreenedData] = useState({
-    "ec":Array().fill(""),
-    "re":Array().fill(""),
-    "rc":Array().fill(""),
-    "alpha":Array().fill(""),
-    "delta":Array().fill(""),
-    "dr":Array().fill(""),
-    "cweight":Array().fill(""),
-    "beta":Array().fill(""),
-    "Asub":Array().fill(""),
-    "lat":""
-  })
-  const HandleEamScreenedChange = (atom, equation, constant, value, index, idx) =>{
-    const newEamScreened = {...EamScrenedData};
-    if(constant === "lat"){
-      newEamScreened[constant] = value
-      setEamScreenedData(newEamScreened);
-      return;
-    }
- 
-    newEamScreened[constant] = [...newEamScreened[constant]]; 
-    newEamScreened[constant][index] = value; 
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "eamscreened"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: EamScrenedData, 
-        };
-        return updatedState; 
-      });
-    }
-
-    setEamScreenedData(newEamScreened);
-  }
-
-  const HandleRepulse = () =>{
-    const repulse = {
-      "b":"",
-      "rc":"",
-      "alpha":"",
-      "dr":""
-    }
-    return repulse
-  }
-
-  const[RepulseData, setRepulseData] = useState({
-    "b":"",
-    "rc":"",
-    "alpha":"",
-    "dr":""
-  })
-
-  const HandleRepulseChange = (atom, equation, constant, value, idx) =>{
-    setRepulseData((prev)=>(
-      {...prev,[constant]:value}
-    ))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "repulse"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: RepulseData, 
-        };
-        return updatedState; 
-      });
-    }
-  }
-
-
-  const HandleRose = () =>{
-    const rose = {
-      "b":"",
-      "rc":"",
-      "alpha":"",
-      "delta":"",
-      "dr":""
-    }
-    return rose
-  }
-
-  const [RoseData, setRoseData] = useState({
-      "b":"",
-      "rc":"",
-      "alpha":"",
-      "delta":"",
-      "dr":""
-  })
-
-  const HandleRoseChange = (atom, equation, constant, value, idx) =>{
-    setRoseData((prev)=>(
-      {...prev,[constant]:value}
-    ))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "rose"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: RoseData, 
-        };
-        return updatedState; 
-      });
-    }
-  }
-
-  const HandleRosescreened = () =>{
-   const rosescreened = {
-      "ec":"",
-      "re":"",
-      "rc":"",
-      "alpha":"",
-      "delta":"",
-      "dr":""
-    }
-    return rosescreened
-  }
-
-  const [RoseScreenedData, setRoseScreenedData] = useState({
-    "ec":"",
-    "re":"",
-    "rc":"",
-    "alpha":"",
-    "delta":"",
-    "dr":""
-  })
-  const HandleRosescreenedChange = (atom, equation, constant, value, idx) =>{
-    setRoseScreenedData((prev)=>(
-      {...prev,[constant]:value}
-    ))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "rosescreened"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: RoseScreenedData, 
-        };
-        return updatedState; 
-      });
-    }
-  }
-
-  const HandleSpinbiquadratic = () =>{
-    const spinbiquadratic = {
-      "aJ":"",
-      "bJ":"",
-      "dJ":"",
-      "aK":"",
-      "bK":"",
-      "rc":"",
-      "dr":""
-    }
-    return spinbiquadratic
-  }
-
-
-  const [SpinBiquadraticData, setSpinBiquadraticData] = useState({
-    "aJ":"",
-    "bJ":"",
-    "dJ":"",
-    "aK":"",
-    "bK":"",
-    "rc":"",
-    "dr":""
-  })
-
-  const HandleSpinbiquadraticChange = (atom, equation, constant, value, idx) =>{
-    setSpinBiquadraticData((prev)=>({...prev, [constant]:value}))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "spinbiquadratic"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: SpinBiquadraticData, 
-        };
-        return updatedState; 
-      });
-    }
-  }
-
-  const HandleSpinj = () =>{
-    const spinJ = {
-      "a":"",
-      "re":"",
-      "rc":"",
-      "b":"",
-      "dr":""
-    }
-    return spinJ
-  }
-
-  const [SpinJData, setSpinJData] = useState({ 
-    "a":"",
-    "re":"",
-    "rc":"",
-    "b":"",
-    "dr":""})
-
-  const HandleSpinJChange = (atom, equation, constant, value, idx) =>{
-    setSpinJData((prev)=>({...prev, [constant]:value}))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "spinj"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: SpinJData, 
-        };
-        return updatedState; 
-      });
-    }
-  }
-
-
-
-  const HandleSpinjscreened = () =>{
-    const spinjscreened = {
-      "a":"",
-      "re":"",
-      "rc":"",
-      "b":"",
-      "dr":""
-    } 
-    return spinjscreened
-  }
-
-  const [SpinJScreenedData, setSpinJScreenedData] = useState({
-    "a":"",
-    "re":"",
-    "rc":"",
-    "b":"",
-    "dr":""
-  })
-
-  const HandleSpinJScreenedChange = (atom, equation, constant, value, idx) =>{
-    setSpinJScreenedData((prev)=>({...prev, [constant]:value}))
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "spinjscreened"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: SpinJScreenedData, 
-        };
-        return updatedState; 
-      });
-    }
-    
-  }
-
-
-  const HandleZbl = () =>{
-    const Zbl = {
-      "zi":"",
-      "zj":"",
-      "rc":"",
-      "dr":""
-    }
-    return Zbl
-  }
-
-  const [ZblData, setZblData] = useState({
-    "zi":"",
-    "zj":"",
-    "rc":"",
-    "dr":""
-  })
-
-  const HandleZblChange = (atom, equation, constant, value, idx) =>{
-    setZblData((prev)=>({...prev, [constant]:value}))
-  }
-
-  const [stateEquationsPerElement, setStateEquationsPerElement] = useState({});
+  const [equationData, setEquationData] = useState(initialState);
   const [stateEquationsArray, setStateEquationsArray] = useState({});
-  const [stateEquationConstants, setStateEquationConstants] = useState({})
 
+  const dispatch = useDispatch();
+  const reduxStateEquations = useSelector((state) => state.data.stateequations);
+
+  const initializeEquationData = (type, n = 1) => {
+    switch (type) {
+      case "covalent":
+        return {
+          ec: Array(n).fill(""),
+          a: Array(n).fill(""),
+          rc: Array(1).fill(""),
+          b: Array(n).fill(""),
+          c: Array(n).fill(""),
+          dr: Array(n).fill("")
+        };
+      case "eamscreened":
+        return {
+          ec: Array(n * n).fill(""),
+          re: Array(n * n).fill(""),
+          rc: Array(n * n).fill(""),
+          alpha: Array(n * n).fill(""),
+          delta: Array(n * n).fill(""),
+          dr: Array(n * n).fill(""),
+          cweight: Array(n).fill(""),
+          beta: Array(n).fill(""),
+          Asub: Array(n).fill(""),
+          lat: ["b1", "b2", "bcc", "ch4", "dia", "dim", "fcc", "hcp", "l12"]
+        };
+      case "repulse":
+      case "rose":
+      case "rosescreened":
+      case "spinj":
+      case "spinjscreened":
+      case "zbl":
+      case "spinbiquadratic":
+        return { ...initialState[type] };
+      default:
+        return {};
+    }
+  };
+
+  const handleEquationDataChange = (atom, equation, type, constant, value, index, idx) => {
+    setEquationData((prev) => {
+      const newData = { ...prev };
+      const newTypeData = { ...newData[type] };
+
+      if (type === "eamscreened" && constant === "lat") {
+        newTypeData[constant] = value;
+      } else if (Array.isArray(newTypeData[constant])) {
+        newTypeData[constant] = [...newTypeData[constant]];
+        newTypeData[constant][index] = value;
+      } else {
+        newTypeData[constant] = value;
+      }
+
+      newData[type] = newTypeData;
+
+      // Update stateEquationsArray
+      setStateEquationsArray((prevState) => {
+        if (!prevState[atom]?.[idx]?.equation === equation ||
+            !prevState[atom]?.[idx]?.type === type) {
+          return prevState;
+        }
+
+        const updatedState = { ...prevState };
+        updatedState[atom] = [...(prevState[atom] || [])];
+        updatedState[atom][idx] = {
+          ...updatedState[atom][idx],
+          stateequationconstants: newTypeData
+        };
+        return updatedState;
+      });
+
+      return newData;
+    });
+  };
 
   const handleStateEquationsPerElement = (num, atom) => {
     const count = Number(num);
-    setStateEquationsPerElement((prev) => ({ ...prev, [atom]: count }));
     setStateEquationsArray((prev) => ({
       ...prev,
-      [atom]: Array(count).fill(""),
+      [atom]: Array(count).fill().map(() => ({ equation: "", type: "", stateequationconstants: {} }))
     }));
   };
 
-  const HandleStateEquationsPerElementChange = (equation, atom, idx) => {
+  const handleStateEquationsPerElementChange = (equation, atom, idx) => {
     setStateEquationsArray((prev) => {
       const updatedArray = [...(prev[atom] || [])];
-      updatedArray[idx] = {equation};
+      updatedArray[idx] = { ...updatedArray[idx], equation };
+      
+      // Initialize constants based on equation format
+      const parts = equation.split("_");
+      const type = parts.length === 1 ? "eshift" : parts.length === 2 ? "" : "";
+      updatedArray[idx].type = type;
+      updatedArray[idx].stateequationconstants = initializeEquationData(type, parts.length);
 
       return { ...prev, [atom]: updatedArray };
     });
   };
 
-  const HandleEquationTypeChange = (type, atom, idx) =>{
+  const handleEquationTypeChange = (type, atom, idx) => {
     setStateEquationsArray((prev) => {
       const updatedArray = [...(prev[atom] || [])];
-      updatedArray[idx] = {...prev[atom][idx],type};
+      updatedArray[idx] = {
+        ...updatedArray[idx],
+        type,
+        stateequationconstants: initializeEquationData(type, updatedArray[idx].equation?.split("_").length)
+      };
       return { ...prev, [atom]: updatedArray };
-    
     });
-  }
+  };
 
-   const [stateequationconstants, setstateequationconstants] = useState()
-  const HandleStateEquationConstants = (constant, value, atom,index, idx) =>{
+  useEffect(() => {
+    dispatch(setStateEquations(stateEquationsArray));
+  }, [stateEquationsArray, dispatch]);
 
-    setstateequationconstants((prev)=>(
-      {...prev, [constant]:{[index]:value}} 
-    ))
+  const memoizedStateEquations = useMemo(() => equationData, [equationData]);
 
-
-    if (
-      stateEquationsArray?.[atom]?.[idx]?.equation === equation &&
-      stateEquationsArray?.[atom]?.[idx]?.type === "zbl"
-    ) {
-      setStateEquationsArray((prevState) => {
-        const updatedState = { ...prevState };
-        updatedState[atom] = Array.isArray(prevState[atom])
-          ? [...prevState[atom]]
-          : [];
-        updatedState[atom][idx] = {
-          ...updatedState[atom][idx], 
-          stateequationconstants: ZblData, 
-        };
-        return updatedState; 
-      });
-    }
-
-    };
-
-const StateEquations = useMemo(()=>({
-  Covalent,
-  EamScrenedData,
-  RepulseData,
-  RoseData,
-  RoseScreenedData,
-  SpinJData,
-  SpinBiquadraticData,
-  SpinJScreenedData,
-  ZblData
-}),[ Covalent,
-  EamScrenedData,
-  RepulseData,
-  RoseData,
-  RoseScreenedData,
-  SpinJData,
-  SpinBiquadraticData,
-  SpinJScreenedData,
-  ZblData])
-
-// const StateEquationsData = {
-//   stateEquationsArray
-// }
-
-const dispatch = useDispatch();
-
-useEffect(()=>{
-dispatch(setStateEquations(stateEquationsArray))
-
-},[stateEquationsArray, dispatch ])
-
-const data = useSelector((state)=>state.data.stateequations)
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
@@ -509,15 +173,13 @@ const data = useSelector((state)=>state.data.stateequations)
                 id={`state-equations-${atom}`}
                 className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="Enter number of equations"
-                onChange={(e) =>
-                  handleStateEquationsPerElement(e.target.value, atom)
-                }
+                onChange={(e) => handleStateEquationsPerElement(e.target.value, atom)}
               />
             </div>
 
             {stateEquationsArray[atom]?.length > 0 && (
               <div className="space-y-4">
-                {stateEquationsArray[atom]?.map((eq, idx) => (
+                {stateEquationsArray[atom].map((eq, idx) => (
                   <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                     <div>
                       <label
@@ -531,13 +193,7 @@ const data = useSelector((state)=>state.data.stateequations)
                         id={`equation-${atom}-${idx}`}
                         className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         placeholder={`Enter equation ${idx + 1}. Ex: Li_Li`}
-                        onChange={(e) =>
-                          HandleStateEquationsPerElementChange(
-                            e.target.value,
-                            atom,
-                            idx
-                          )
-                        }
+                        onChange={(e) => handleStateEquationsPerElementChange(e.target.value, atom, idx)}
                       />
                     </div>
                     <div>
@@ -552,7 +208,8 @@ const data = useSelector((state)=>state.data.stateequations)
                           <select
                             id={`option-${atom}-${idx}`}
                             className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            onChange={(e)=>HandleEquationTypeChange(e.target.value, atom, idx)}
+                            onChange={(e) => handleEquationTypeChange(e.target.value, atom, idx)}
+                            value={eq.type}
                           >
                             <option value="">Select an option</option>
                             <option value="eshift">eshift</option>
@@ -570,7 +227,8 @@ const data = useSelector((state)=>state.data.stateequations)
                           <select
                             id={`state-equation-${atom}-${idx}`}
                             className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            onChange={(e)=>HandleEquationTypeChange(e.target.value, atom, idx)}
+                            onChange={(e) => handleEquationTypeChange(e.target.value, atom, idx)}
+                            value={eq.type}
                           >
                             <option value="">Select an option</option>
                             {stateEquations.map((stateEquation, optionIdx) => (
@@ -583,187 +241,64 @@ const data = useSelector((state)=>state.data.stateequations)
                       ) : null}
                     </div>
                     <div className="flex flex-col gap-4 p-4 bg-gray-50 rounded-md shadow-md">
-  {eq.type === "covalent" ? (
-    Object.keys(HandleCovalent(eq.equation?.split("_").length)).map((covalent) => {
-      return (
-        <div key={covalent} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-          <label className="font-semibold text-gray-700 text-lg">
-            {covalent}
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {HandleCovalent(eq.equation?.split("_").length)[covalent].map((constant, index) => {
-              return (
-                <div key={index} className="flex flex-col gap-1">
-                  <input
-                    className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder={constant}
-                    onChange={(e)=>{HandleCovalentChange(atom, eq.equation, covalent,e.target.value,index, idx)}}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })
-  ) : eq.type === "eamscreened" ? (
-    (
-      Object.keys(HandleEamscreened(eq.equation?.split("_").length)).map((eamscreened) => {
-        return (
-          <div key={eamscreened} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {eamscreened}
-            </label>
-            {
-              eamscreened === "lat" ?
-              <select  onChange={(e)=>HandleEamScreenedChange(atom, eq.equation, eamscreened, e.target.value, index, idx )}>
-                <option value={""}>Select an option</option>
-                {
-                  HandleEamscreened(eq.equation?.split("_").length)[eamscreened].map((constant, index)=>{
-                    return(
-                    <option value={constant}>
-                      {constant}
-                    </option>
-                    )
-                  })
-                }
-              </select>: 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {HandleEamscreened(eq.equation?.split("_").length)[eamscreened].map((constant, index) => {
-                return(
-                  <div key={index} className="flex flex-col gap-1">
-                    <input
-                    onChange={(e)=>HandleEamScreenedChange(atom, eq.equation, eamscreened, e.target.value, index, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={constant}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-            }
-           
-          </div>
-        );
-      })
-    )
-  ): eq.type === "eshift" ? (
-    <div>
-    <label className="font-semibold text-gray-700 text-lg">
-    eshift
-  </label>
-  <input
-  className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-  placeholder={"eshift"}/>
-  </div>
-
-    ) : eq.type === "repulse" ? (
-      Object.keys(HandleRepulse(eq.equation?.split("_").length)).map((repulse) => {
-        return (
-          <div key={repulse} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {repulse}
-            </label>
-                    <input
-                      onChange={(e)=>HandleRepulseChange(atom, eq.equation, repulse, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={repulse}
-                    />
-            </div>
-        );
-      })
-    ): eq.type === "rose" ? (
-      Object.keys(HandleRose(eq.equation?.split("_").length)).map((rose) => {
-        return (
-          <div key={rose} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {rose}
-            </label>
-                    <input
-                    onChange={(e)=>HandleRoseChange(atom, eq.equation, rose, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={rose}
-                    />
-            </div>
-        );
-      })
-    ): eq.type === "rosescreened" ? (
-      Object.keys(HandleRosescreened(eq.equation?.split("_").length)).map((rosescreened) => {
-        return (
-          <div key={rosescreened} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {rosescreened}
-            </label>
-                    <input
-                    onChange={(e)=>HandleRosescreenedChange(atom, eq.equation, rosescreened, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={rosescreened}
-                    />
-            </div>
-        );
-      })
-    ):eq.type === "spinbiquadratic" ? (
-      Object.keys(HandleSpinbiquadratic(eq.equation?.split("_").length)).map((spinbiquadratic) => {
-        return (
-          <div key={spinbiquadratic} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {spinbiquadratic}
-            </label>
-                    <input
-                    onChange={(e)=>HandleSpinbiquadraticChange(atom, eq.equation, spinbiquadratic, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={spinbiquadratic}
-                    />
-            </div>
-        );
-      })
-    ):eq.type === "spinj" ? (
-      Object.keys(HandleSpinj(eq.equation?.split("_").length)).map((spinj) => {
-        return (
-          <div key={spinj} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {spinj}
-            </label>
-                    <input
-                    onChange={(e)=>HandleSpinJChange(atom, eq.equation, spinj, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={spinj}
-                    />
-            </div>
-        );
-      })
-    ):eq.type === "spinjscreened" ? (
-      Object.keys(HandleSpinjscreened(eq.equation?.split("_").length)).map((spinjscreened) => {
-        return (
-          <div key={spinjscreened} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {spinjscreened}
-            </label>
-                    <input
-                    onChange={(e)=>HandleSpinJScreenedChange(atom, eq.equation, spinjscreened, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={spinjscreened}
-                    />
-            </div>
-        );
-      })
-    ):eq.type === "zbl" ? (
-      Object.keys(HandleZbl(eq.equation?.split("_").length)).map((zbl) => {
-        return (
-          <div key={zbl} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
-            <label className="font-semibold text-gray-700 text-lg">
-              {zbl}
-            </label>
-                    <input
-                      onChange={(e)=>HandleZblChange(atom, eq.equation, zbl, e.target.value, idx)}
-                      className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={zbl}
-                    />
-            </div>
-        );
-      })
-    ):("")}
-</div>
+                      {eq.type && memoizedStateEquations[eq.type] && (
+                        Object.keys(memoizedStateEquations[eq.type]).map((constant) => (
+                          <div key={constant} className="flex flex-col gap-4 border-b border-gray-300 pb-4">
+                            <label className="font-semibold text-gray-700 text-lg">
+                              {constant}
+                            </label>
+                            {eq.type === "eamscreened" && constant === "lat" ? (
+                              <select
+                                onChange={(e) => handleEquationDataChange(
+                                  atom, eq.equation, eq.type, constant, e.target.value, 0, idx
+                                )}
+                                value={memoizedStateEquations[eq.type][constant]}
+                              >
+                                <option value="">Select an option</option>
+                                {memoizedStateEquations[eq.type][constant].map((option, i) => (
+                                  <option key={i} value={option}>{option}</option>
+                                ))}
+                              </select>
+                            ) : Array.isArray(memoizedStateEquations[eq.type][constant]) ? (
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {memoizedStateEquations[eq.type][constant].map((value, index) => (
+                                  <input
+                                    key={index}
+                                    className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder={constant}
+                                    value={value}
+                                    onChange={(e) => handleEquationDataChange(
+                                      atom, eq.equation, eq.type, constant, e.target.value, index, idx
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            ) : (
+                              <input
+                                className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder={constant}
+                                value={memoizedStateEquations[eq.type][constant]}
+                                onChange={(e) => handleEquationDataChange(
+                                  atom, eq.equation, eq.type, constant, e.target.value, 0, idx
+                                )}
+                              />
+                            )}
+                          </div>
+                        ))
+                      )}
+                      {eq.type === "eshift" && (
+                        <div>
+                          <label className="font-semibold text-gray-700 text-lg">eshift</label>
+                          <input
+                            className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="eshift"
+                            onChange={(e) => handleEquationDataChange(
+                              atom, eq.equation, eq.type, "eshift", e.target.value, 0, idx
+                            )}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
