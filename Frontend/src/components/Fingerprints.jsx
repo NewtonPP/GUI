@@ -15,7 +15,7 @@ const Fingerprints = ({ atoms = [] }) => {
   }
 
   const handleFingerprintCount = (value, atom) => {
-    const count = Number(value);
+    const count = Math.abs(Number(value));
     setFingerprintsPerElement((prev) => ({ ...prev, [atom]: count }));
     setFingerprintsArray((prev) => ({
       ...prev,

@@ -65,7 +65,7 @@ export const GenerateScripts = async (req, res) => {
                 for (let constKey in stateequationconstants) {
                     const fullKey = `stateequationconstants:${equation}:${type}:${constKey}:`;
                     const val = stateequationconstants[constKey];
-                    lines.push(Array.isArray(val) ? `${fullKey}\n${val.join(" ")}` : `${fullKey}\n${val}`);
+                    lines.push(Array.isArray(val) ? `${fullKey}\n${val?.join(" ")}` : `${fullKey}\n${val}`);
                 }
             });
         }
@@ -76,12 +76,12 @@ export const GenerateScripts = async (req, res) => {
 
         for (let entry of netsperelement) {
             lines.push(`nets:${entry.atom}:`);
-            lines.push(entry.Nets.map(n => n?.value).filter(Boolean).join(" "));
+            lines.push(entry.Nets.map(n => n?.value).filter(Boolean)?.join(" "));
 
             for (let net of entry.Nets) {
                 if (!net?.value) continue;
-                lines.push(`netconstants:${entry.atom}:${net.value}:layersize:\n${net.layersize.join(" ")}`);
-                lines.push(`netconstants:${entry.atom}:${net.value}:activation:\n${net.activation.join(" ")}`);
+                lines.push(`netconstants:${entry.atom}:${net.value}:layersize:\n${net.layersize?.join(" ")}`);
+                lines.push(`netconstants:${entry.atom}:${net.value}:activation:\n${net.activation?.join(" ")}`);
                 lines.push(`netconstants:${entry.atom}:${net.value}:fingerprintmap:\n${net?.fingerprintmap?.join(" ")}`);
                 if (net.order) {
                     lines.push(`netconstants:${entry.atom}:${net.value}:order:\n${net.order}`);

@@ -4,8 +4,8 @@ import { setNetsPerElement } from '../Slices/DataSlice';
 import CreatableSelect from 'react-select/creatable';
 
 const NetsPerElement = ({ atoms, fingerprints }) => {
-  const [NetData, setNetData] = useState([]); // Initialize as an empty array
-  const [FPS, setFPS] = useState({}); // Initialize FPS state
+  const [NetData, setNetData] = useState([]); 
+  const [FPS, setFPS] = useState({}); 
   const ActivationValues = ["capped","cappedsharp","cappedshift","linear","sharpcapped","sigl","slowcapped","tanh",
     "tanhtwist","ttanh","zero"
   ]
@@ -22,9 +22,9 @@ const NetsPerElement = ({ atoms, fingerprints }) => {
   const HandleChangeInNet = (value, index, idx, atom) => {
     setNetData((prev) => {
       const newNetData = [...prev];
-      newNetData[index] = { ...newNetData[index] }; // Spread to maintain other properties
-      newNetData[index].Nets = [...newNetData[index].Nets]; // Spread to create a new array
-      newNetData[index].Nets[idx] = { value }; // Update the specific net
+      newNetData[index] = { ...newNetData[index] }; 
+      newNetData[index].Nets = [...newNetData[index].Nets]; 
+      newNetData[index].Nets[idx] = { value };
       return newNetData;
     });
   };
@@ -138,8 +138,9 @@ const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
               type="number"
               min='0'
               placeholder="Enter number of nets"
+              
               onChange={(e) =>
-                HandleChangeInNumber(Number(e.target.value), atom, index)
+                HandleChangeInNumber(Math.abs(Number(e.target.value)), atom, index)
               }
               className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -210,21 +211,7 @@ const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
                           Fingerprint Map
                         </label>
                         <CreatableSelect isMulti options={FPS[atom]} onChange={(e)=>HandleFingerprintSelection(e, atom, index, idx)}/>
-                        {/* <select
-                          className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          onChange={(e) => {
-                            HandleChangeInFingerprintMap(e.target.value, index, idx, atom);
-                          }}
-                        >
-                            <option>Select</option>
-                          {
-                            FPS[atom].map((fp)=>(
-                            
-                            fp?<option>{fp}</option>:""
-                          
-                            ))
-                          }
-                        </select> */}
+
                       </div>
                     </div>
                   ) : NetData[index]?.Nets[idx]?.value === "exchangespin_0" ? (
@@ -270,21 +257,7 @@ const HandleChangeInActivation = (value, index, idx, atom, layerIdx) => {
                           Fingerprint Map
                         </label>
                         <CreatableSelect isMulti options={FPS[atom]} onChange={(e)=>HandleFingerprintSelection(e, atom, index, idx)}/>
-                        {/* <select
-                          className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          onChange={(e) => {
-                            HandleChangeInFingerprintMap(e.target.value, index, idx, atom);
-                          }}
-                        >
-                          <option>Select</option>
-                          {
-                            FPS[atom].map((fp)=>(
-                            
-                            fp?<option>{fp.value}</option>:""
-                          
-                            ))
-                          }
-                        </select> */}
+ 
                       </div>
 
                       <div>

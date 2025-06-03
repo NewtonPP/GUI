@@ -1,0 +1,214 @@
+atomtypes:
+H He
+mass:H:
+1.008
+mass:He:
+4.0026022
+fingerprintsperelement:H:
+2
+fingerprintsperelement:He:
+3
+fingerprints:H_H:
+radialspin
+fingerprintconstants:H_H:radialspin:re
+1
+fingerprintconstants:H_H:radialspin:rc
+2
+fingerprintconstants:H_H:radialspin:dr
+3
+fingerprintconstants:H_H:radialspin:o
+4
+fingerprintconstants:H_H:radialspin:n
+5
+fingerprintconstants:H_H:radialspin:alpha
+1 2
+fingerprints:H_H:
+radialspinscreened
+fingerprintconstants:H_H:radialspinscreened:re
+1
+fingerprintconstants:H_H:radialspinscreened:rc
+2
+fingerprintconstants:H_H:radialspinscreened:dr
+3
+fingerprintconstants:H_H:radialspinscreened:o
+4
+fingerprintconstants:H_H:radialspinscreened:n
+5
+fingerprintconstants:H_H:radialspinscreened:alpha
+1 2
+fingerprints:He:
+temperature
+fingerprints:He_He_He:
+bondspin
+fingerprintconstants:He_He_He:bondspin:re
+1
+fingerprintconstants:He_He_He:bondspin:rc
+2
+fingerprintconstants:He_He_He:bondspin:m
+3
+fingerprintconstants:He_He_He:bondspin:dr
+3
+fingerprintconstants:He_He_He:bondspin:alphak
+1
+fingerprints:He_He_He_He:
+torsion
+fingerprintconstants:He_He_He_He:torsion:re
+1
+fingerprintconstants:He_He_He_He:torsion:rc
+2
+fingerprintconstants:He_He_He_He:torsion:dr
+3
+fingerprintconstants:He_He_He_He:torsion:m
+4
+fingerprintconstants:He_He_He_He:torsion:alphak
+1 2 3 4 5
+screening:H_H_H:cmin:
+1
+screening:H_H_H:cmax:
+2
+screening:H_H_He:cmin:
+1
+screening:H_H_He:cmax:
+2
+screening:H_He_H:cmin:
+3
+screening:H_He_H:cmax:
+1
+screening:H_He_He:cmax:
+2
+screening:H_He_He:cmin:
+2
+stateequations:H:
+eshift
+stateequationconstants:H:eshift:eshift:
+1
+stateequations:H_H:
+covalent
+stateequationconstants:H_H:covalent:ec:
+1 2
+stateequationconstants:H_H:covalent:a:
+2 1
+stateequationconstants:H_H:covalent:rc:
+1
+stateequationconstants:H_H:covalent:b:
+2 1
+stateequationconstants:H_H:covalent:c:
+2 1
+stateequationconstants:H_H:covalent:dr:
+1 1
+stateequations:He_He:
+eamscreened
+stateequationconstants:He_He:eamscreened:ec:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:re:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:rc:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:alpha:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:delta:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:dr:
+1 2 3 4
+stateequationconstants:He_He:eamscreened:cweight:
+1 1
+stateequationconstants:He_He:eamscreened:beta:
+1 1
+stateequationconstants:He_He:eamscreened:Asub:
+1 2
+stateequationconstants:He_He:eamscreened:lat:
+ch4
+stateequations:He_He:
+zbl
+stateequationconstants:He_He:zbl:zi:
+1
+stateequationconstants:He_He:zbl:zj:
+2
+stateequationconstants:He_He:zbl:rc:
+3
+stateequationconstants:He_He:zbl:dr:
+4
+stateequations:He_He:
+rose
+stateequationconstants:He_He:rose:b:
+1
+stateequationconstants:He_He:rose:rc:
+2
+stateequationconstants:He_He:rose:alpha:
+3
+stateequationconstants:He_He:rose:delta:
+4
+stateequationconstants:He_He:rose:dr:
+5
+calibrationparameters:algorithm:
+LMSearch
+calibrationparameters:dumpdirectory:
+.
+calibrationparameters:doforces:
+1
+calibrationparameters:normalizeinput:
+1
+calibrationparameters:tolerance:
+-0.9999999
+calibrationparameters:regularizer:
+0.00022
+calibrationparameters:logfile:
+
+calibrationparameters:potentialoutputfile:
+
+calibrationparameters:potentialoutputfrequency:
+10
+calibrationparameters:maxepochs:
+10000
+calibrationparameters:overwritepotentials:
+0
+calibrationparameters:debug1freq:
+10
+calibrationparameters:debug2freq:
+0
+calibrationparameters:debug3freq:
+0
+calibrationparameters:debug4freq:
+0
+calibrationparameters:debug5freq:
+0
+calibrationparameters:debug6freq:
+0
+calibrationparameters:adaptiveregularizer:
+0
+calibrationparameters:lambdainitial:
+1000
+calibrationparameters:lambdaincrease:
+10
+calibrationparameters:lambdareduce:
+0.2
+calibrationparameters:inumweight:
+1
+calibrationparameters:seed:
+
+calibrationparameters:targettype:
+1
+nets:H:
+default_0 exchangespin_0
+netconstants:H:default_0:layersize:
+1 2 3 4
+netconstants:H:default_0:activation:
+capped cappedsharp cappedshift
+netconstants:H:default_0:fingerprintmap:
+radialspinscreened
+netconstants:H:exchangespin_0:layersize:
+1 2 3 4 5 6
+netconstants:H:exchangespin_0:activation:
+linear sharpcapped sigl slowcapped tanhtwist
+netconstants:H:exchangespin_0:fingerprintmap:
+radialspinscreened radialspin
+netconstants:H:exchangespin_0:order:
+1
+nets:He:
+default_0
+netconstants:He:default_0:layersize:
+1 2 3
+netconstants:He:default_0:activation:
+ttanh zero
+netconstants:He:default_0:fingerprintmap:
+bondspin torsion

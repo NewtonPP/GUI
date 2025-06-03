@@ -29,7 +29,9 @@ const StateEquations = ({ atoms = [] }) => {
     spinbiquadratic: { aJ: "", bJ: "", dJ: "", aK: "", bK: "", rc: "", dr: "" },
     spinj: { a: "", re: "", rc: "", b: "", dr: "" },
     spinjscreened: { a: "", re: "", rc: "", b: "", dr: "" },
-    zbl: { zi: "", zj: "", rc: "", dr: "" }
+    zbl: { zi: "", zj: "", rc: "", dr: "" },
+    eshift: { eshift: "" },
+    zero: {}
   };
 
   const [equationData, setEquationData] = useState(initialState);
@@ -60,7 +62,7 @@ const StateEquations = ({ atoms = [] }) => {
           cweight: Array(n).fill(""),
           beta: Array(n).fill(""),
           Asub: Array(n).fill(""),
-          lat: ["b1", "b2", "bcc", "ch4", "dia", "dim", "fcc", "hcp", "l12"]
+          lat: "" // Initialize as empty string
         };
       case "repulse":
       case "rose":
@@ -69,7 +71,10 @@ const StateEquations = ({ atoms = [] }) => {
       case "spinjscreened":
       case "zbl":
       case "spinbiquadratic":
+      case "eshift":
         return { ...initialState[type] };
+      case "zero":
+        return {};
       default:
         return {};
     }
@@ -80,9 +85,7 @@ const StateEquations = ({ atoms = [] }) => {
       const newData = { ...prev };
       const newTypeData = { ...newData[type] };
 
-      if (type === "eamscreened" && constant === "lat") {
-        newTypeData[constant] = value;
-      } else if (Array.isArray(newTypeData[constant])) {
+      if (Array.isArray(newTypeData[constant])) {
         newTypeData[constant] = [...newTypeData[constant]];
         newTypeData[constant][index] = value;
       } else {
@@ -93,11 +96,6 @@ const StateEquations = ({ atoms = [] }) => {
 
       // Update stateEquationsArray
       setStateEquationsArray((prevState) => {
-        if (!prevState[atom]?.[idx]?.equation === equation ||
-            !prevState[atom]?.[idx]?.type === type) {
-          return prevState;
-        }
-
         const updatedState = { ...prevState };
         updatedState[atom] = [...(prevState[atom] || [])];
         updatedState[atom][idx] = {
@@ -122,13 +120,20 @@ const StateEquations = ({ atoms = [] }) => {
   const handleStateEquationsPerElementChange = (equation, atom, idx) => {
     setStateEquationsArray((prev) => {
       const updatedArray = [...(prev[atom] || [])];
-      updatedArray[idx] = { ...updatedArray[idx], equation };
-      
-      // Initialize constants based on equation format
       const parts = equation.split("_");
       const type = parts.length === 1 ? "eshift" : parts.length === 2 ? "" : "";
-      updatedArray[idx].type = type;
-      updatedArray[idx].stateequationconstants = initializeEquationData(type, parts.length);
+      updatedArray[idx] = {
+        ...updatedArray[idx],
+        equation,
+        type,
+        stateequationconstants: initializeEquationData(type, parts.length)
+      };
+      
+      // Update equationData to reflect the new type
+      setEquationData((prev) => ({
+        ...prev,
+        [type]: initializeEquationData(type, parts.length)
+      }));
 
       return { ...prev, [atom]: updatedArray };
     });
@@ -137,11 +142,19 @@ const StateEquations = ({ atoms = [] }) => {
   const handleEquationTypeChange = (type, atom, idx) => {
     setStateEquationsArray((prev) => {
       const updatedArray = [...(prev[atom] || [])];
+      const n = updatedArray[idx].equation?.split("_").length || 1;
       updatedArray[idx] = {
         ...updatedArray[idx],
         type,
-        stateequationconstants: initializeEquationData(type, updatedArray[idx].equation?.split("_").length)
+        stateequationconstants: initializeEquationData(type, n)
       };
+
+      // Update equationData to reflect the new type
+      setEquationData((prev) => ({
+        ...prev,
+        [type]: initializeEquationData(type, n)
+      }));
+
       return { ...prev, [atom]: updatedArray };
     });
   };
@@ -151,6 +164,8 @@ const StateEquations = ({ atoms = [] }) => {
   }, [stateEquationsArray, dispatch]);
 
   const memoizedStateEquations = useMemo(() => equationData, [equationData]);
+
+  const latticeOptions = ["b1", "b2", "bcc", "ch4", "dia", "dim", "fcc", "hcp", "l12"];
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -173,7 +188,7 @@ const StateEquations = ({ atoms = [] }) => {
                 id={`state-equations-${atom}`}
                 className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="Enter number of equations"
-                onChange={(e) => handleStateEquationsPerElement(e.target.value, atom)}
+                onChange={(e) => handleStateEquationsPerElement(Math.abs(Number(e.target.value)), atom)}
               />
             </div>
 
@@ -252,10 +267,10 @@ const StateEquations = ({ atoms = [] }) => {
                                 onChange={(e) => handleEquationDataChange(
                                   atom, eq.equation, eq.type, constant, e.target.value, 0, idx
                                 )}
-                                value={memoizedStateEquations[eq.type][constant]}
+                                value={eq.stateequationconstants[constant] || ""}
                               >
                                 <option value="">Select an option</option>
-                                {memoizedStateEquations[eq.type][constant].map((option, i) => (
+                                {latticeOptions.map((option, i) => (
                                   <option key={i} value={option}>{option}</option>
                                 ))}
                               </select>
@@ -266,7 +281,7 @@ const StateEquations = ({ atoms = [] }) => {
                                     key={index}
                                     className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder={constant}
-                                    value={value}
+                                    value={eq.stateequationconstants[constant]?.[index] || value}
                                     onChange={(e) => handleEquationDataChange(
                                       atom, eq.equation, eq.type, constant, e.target.value, index, idx
                                     )}
@@ -277,7 +292,7 @@ const StateEquations = ({ atoms = [] }) => {
                               <input
                                 className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder={constant}
-                                value={memoizedStateEquations[eq.type][constant]}
+                                value={eq.stateequationconstants[constant] || ""}
                                 onChange={(e) => handleEquationDataChange(
                                   atom, eq.equation, eq.type, constant, e.target.value, 0, idx
                                 )}
@@ -292,6 +307,7 @@ const StateEquations = ({ atoms = [] }) => {
                           <input
                             className="h-10 w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="eshift"
+                            value={eq.stateequationconstants.eshift || ""}
                             onChange={(e) => handleEquationDataChange(
                               atom, eq.equation, eq.type, "eshift", e.target.value, 0, idx
                             )}

@@ -1,0 +1,74 @@
+atomtypes:
+H
+mass:H:
+1.008
+stateequations:H_H:
+eamscreened
+stateequationconstants:H_H:eamscreened:ec:
+1 2 3 4
+stateequationconstants:H_H:eamscreened:re:
+2 3 2 3
+stateequationconstants:H_H:eamscreened:rc:
+1 3 2 3
+stateequationconstants:H_H:eamscreened:alpha:
+2 3 2 3
+stateequationconstants:H_H:eamscreened:delta:
+2 1 2 1
+stateequationconstants:H_H:eamscreened:dr:
+1 1 2 1
+stateequationconstants:H_H:eamscreened:cweight:
+1 1
+stateequationconstants:H_H:eamscreened:beta:
+1 1
+stateequationconstants:H_H:eamscreened:Asub:
+1 1
+stateequationconstants:H_H:eamscreened:lat:
+dim
+calibrationparameters:algorithm:
+LMch
+calibrationparameters:dumpdirectory:
+.
+calibrationparameters:doforces:
+0
+calibrationparameters:normalizeinput:
+0
+calibrationparameters:tolerance:
+0.0000001
+calibrationparameters:regularizer:
+0.0002
+calibrationparameters:logfile:
+
+calibrationparameters:potentialoutputfile:
+
+calibrationparameters:potentialoutputfrequency:
+10
+calibrationparameters:maxepochs:
+10000
+calibrationparameters:overwritepotentials:
+0
+calibrationparameters:debug1freq:
+10
+calibrationparameters:debug2freq:
+0
+calibrationparameters:debug3freq:
+0
+calibrationparameters:debug4freq:
+0
+calibrationparameters:debug5freq:
+0
+calibrationparameters:debug6freq:
+0
+calibrationparameters:adaptiveregularizer:
+0
+calibrationparameters:lambdainitial:
+1000
+calibrationparameters:lambdaincrease:
+10
+calibrationparameters:lambdareduce:
+0.2
+calibrationparameters:inumweight:
+1
+calibrationparameters:seed:
+
+calibrationparameters:targettype:
+1
