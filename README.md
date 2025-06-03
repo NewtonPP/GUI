@@ -26,6 +26,13 @@ The `GenerateScripts` API is a backend service that dynamically generates neural
    ```bash
    git clone https://github.com/NewtonPP/GUI.git
 
+2. Navigate to the Backend and Frontend directory with cd Backend, and cd Frontend commands. At this point make sure you have nodejs installend in your system. If not install it. 
+Do npm install in terminal. This will install necessary packages listed in the package.json.
+You can run the Backend server with node server.js
+You can run the Frontend with npm run dev.
+
+This is all you need to setup GUI in your local machine. 
+
 
 # Tutorial for Using the GUI
 
@@ -47,13 +54,14 @@ Select the fingerprint type.
 
 Specify the fingerprint constants from the provided options.
 
-### Step 3: Configure Network Layers
+### Step 3: Configure Nets
 
-For each selected atom, configure its network layers:
+For each selected atom, choose the number of Nets
 
-Select the number of layers.
-
-Enter the layer size for each layer.
+Select the Net Type
+For layer size, input comma separated values.
+This will enable number of layers - 1 activation options, which you can select from the dropdown.
+After this select the fingerprint map.
 
 ### Step 4: Choose Activation Functions
 
@@ -83,9 +91,10 @@ Configure the calibration parameters:
 
 Algorithm: Select the desired algorithm.
 
-Dump Directory: Choose the output directory for the results.
+Dump Directory: Choose the output directory for the results. By default this is . 
+This doesnot work. So you need to manually enter the path after downloading the file if you have path other than current directory.
 
-Doforces: Select the appropriate option.
+Doforces: Select the appropriate option (0 or 1)
 
 Normalize Input: Enter the value for normalizing inputs.
 

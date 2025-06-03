@@ -45,20 +45,18 @@ const Fingerprints = ({ atoms = [] }) => {
         if (i === index) {
           const updatedParams = { ...item.params, [param]: paramValue };
 
-          // If 'n' or 'o' are updated, calculate 'alpha' array size
           if (param === "n" || param === "o") {
             const n = param === "n" ? parseInt(paramValue, 10) : parseInt(item.params.n || 0, 10);
             const o = param === "o" ? parseInt(paramValue, 10) : parseInt(item.params.o || 0, 10);
             if (!isNaN(n) && !isNaN(o) && n >= o) {
-              updatedParams.alpha = Array(n - o + 1).fill(""); // Initialize alpha array
+              updatedParams.alpha = Array(n - o + 1).fill(""); 
             }
           }
 
-          // If 'k' is updated, initialize the 'alphak' array with size 'k'
           if (param === "k") {
             const k = parseInt(paramValue, 10);
             if (!isNaN(k) && k > 0) {
-              updatedParams.alphak = Array(k).fill(""); // Initialize alphak array
+              updatedParams.alphak = Array(k).fill(""); 
             }
           }
 
